@@ -4,10 +4,10 @@ import lxml.etree as et
 import xml.dom.minidom
 import sys
 
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.uic import loadUi
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication, QPushButton, QComboBox
+from PyQt6.QtCore import pyqtSlot
+from PyQt6.uic import loadUi
+from PyQt6 import QtWidgets
+from PyQt6.QtWidgets import QDialog, QApplication, QPushButton, QComboBox
 
 #Frm Main
 class MainWindow(QDialog):
