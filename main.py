@@ -24,26 +24,38 @@ class MainWindow(QDialog):
         #btnok
         self.btnok.clicked.connect(self.createxml)
 
-        #ComboBox
+        #ComboBoxFieber
         listanswer=["Ja", "Nein"]
         for answer in listanswer:
-            self.cmb1.addItem(answer)
+            self.cmbfieber.addItem(answer)
+
+        # ComboBoxGender
+        listgender = ["M", "W", "D"]
+        for answer in listgender:
+            self.cmbgender.addItem(answer)
+
+        #SpinnBoxAge
+        self.spinboxage.setMinimum(1)
+        self.spinboxage.setMaximum(120)
 
 
 #Button Clicked
     def createxml(self):
         m_encoding = 'UTF-8'
 
+        answerage = str(self.spinboxage.value())
+        answerfieber = str(self.cmbgender.currentText())
+
         root = et.Element("Halsschmerzen")
         doc = et.SubElement(root, "Tonsilitis", Bezeichnung="Tonsilitis Noninfektional")
         alter = et.SubElement(doc, "Alter", Bezeichnung="Alter")
-        wert = et.SubElement(alter, "Wert").text = "3"
+        wert = et.SubElement(alter, "Wert").text = answerage
         dauer = et.SubElement(doc, "DauerTage", von="1", bis="14").text = "some vlaue2"
         risiko = et.SubElement(doc, "Risikofaktoren", Bezeichnung="Rauchen")
         wert = et.SubElement(risiko, "Wert").text = "Ja"
         wert = et.SubElement(risiko, "Wert").text = "Nein"
         symptom = et.SubElement(doc, "Symptopm", Bezeichnung="Fieber")
-        wert = et.SubElement(symptom, "Wert").text = "Ja"
+        wert = et.SubElement(symptom, "Wert").text = answerfieber
         wert = et.SubElement(symptom, "Wert").text = "Nein"
 
         dom = xml.dom.minidom.parseString(et.tostring(root))
