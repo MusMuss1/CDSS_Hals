@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Halsschmerzen>
+	<Tonsilitis Bezeichnung="Tonsilitis Noninfektional">
+		<Alter Bezeichnung="Alter">
+			<Wert>3</Wert>
+		</Alter>
+		<DauerTage von="1" bis="14">some vlaue2</DauerTage>
+		<Risikofaktoren Bezeichnung="Rauchen">
+			<Wert>Ja</Wert>
+			<Wert>Nein</Wert>
+		</Risikofaktoren>
+		<Symptopm Bezeichnung="Fieber">
+			<Wert>Ja</Wert>
+			<Wert>Nein</Wert>
+		</Symptopm>
+	</Tonsilitis>
+</Halsschmerzen>
