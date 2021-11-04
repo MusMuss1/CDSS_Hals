@@ -1,5 +1,5 @@
 print("HI")
-import os
+import random
 import lxml.etree as et
 import xml.dom.minidom
 import sys
@@ -7,7 +7,9 @@ import sys
 from PyQt6.QtCore import pyqtSlot
 from PyQt6.uic import loadUi
 from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton, QComboBox, QDoubleSpinBox, QDialog
+from PyQt6.QtWidgets import *
+from PyQt6.QtCharts import *
+from PyQt6.QtCore import *
 
 #Declarations
 fever = bool
@@ -30,6 +32,7 @@ class MainWindow(QMainWindow):
 
         #btnok
         self.btnok.clicked.connect(self.createxml)
+        #self.btnok.clicked.connect(self.createchart)
 
         #ComboBoxFieber
         listanswer=["Ja", "Nein"]
@@ -52,6 +55,40 @@ class MainWindow(QMainWindow):
         self.spinboxtemp.setSuffix(" °C")
         self.spinboxtemp.setSingleStep(0.1)
 
+#Create Charts
+    def createchart(self):
+        set0 = QBarSet('Center')
+        set1 = QBarSet('Mc')
+        set2 = QBarSet('fever')
+
+        set0.append([3])
+        set1.append([4])
+        set2.append([5])
+
+        series = QBarSeries()
+        series.append(set0)
+        series.append(set1)
+        series.append(set2)
+
+        chart = QChart()
+        chart.addSeries(series)
+        chart.setTitle('Scores')
+        #chart.setAnimationOptions(QChart.SeriesAnimations)
+
+        axisX = QBarCategoryAxis()
+
+        axisY = QValueAxis()
+        axisY.setRange(0, 10)
+
+        chart.addAxis(axisX,Qt.AlignmentFlag.AlignBottom)
+        chart.addAxis(axisY,Qt.AlignmentFlag.AlignLeft)
+
+        chart.legend().setVisible(True)
+        chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
+
+        chartView = QChartView(chart)
+        self.setCentralWidget(chartView)
+
 #Button Clicked
     def createxml(self):
         m_encoding = 'UTF-8'
@@ -65,6 +102,10 @@ class MainWindow(QMainWindow):
         else:
             fever = False
             print(fever)
+
+        if fever == True:
+            centor =+ 1
+            print(centor)
 
         root = et.Element("Halsschmerzen")
         doc = et.SubElement(root, "Tonsilitis", Bezeichnung="Tonsilitis Noninfektional")
@@ -105,11 +146,3 @@ except:
 #window = Tk()
 #window.title('Test')
 #window.mainloop()
-
-
-
-#f = open("krankheit" + ".xml", "w")
-#f.write(str(t))
-#f.write("TEST")
-#f.close()
-#os.system("start " + "krankheit" + ".xml")
