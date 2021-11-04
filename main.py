@@ -7,16 +7,20 @@ import sys
 from PyQt6.QtCore import pyqtSlot
 from PyQt6.uic import loadUi
 from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QDialog, QApplication, QPushButton, QComboBox, QDoubleSpinBox
+from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton, QComboBox, QDoubleSpinBox, QDialog
 
 #Declarations
-fieber = bool
+fever = bool
+centor = 0
+mcisaac = 0
+feverpain = 0
 
 #Frm Main
-class MainWindow(QDialog):
+class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         loadUi("FrmMain.ui",self)
+        self.setWindowTitle("CDSS")
 
 
         #button = QPushButton('PyQt5 button', self)
@@ -44,6 +48,7 @@ class MainWindow(QDialog):
         # SpinnBoxFieber
         self.spinboxtemp.setMinimum(30)
         self.spinboxtemp.setMaximum(44)
+        self.spinboxtemp.setValue(36)
         self.spinboxtemp.setSuffix(" °C")
         self.spinboxtemp.setSingleStep(0.1)
 
@@ -55,11 +60,11 @@ class MainWindow(QDialog):
         #answerfieber = str(self.cmbgender.currentText())
         answerfieber = self.spinboxtemp.value()
         if answerfieber > 38:
-            fieber = True
-            print(fieber)
+            fever = True
+            print(fever)
         else:
-            fieber = False
-            print(fieber)
+            fever = False
+            print(fever)
 
         root = et.Element("Halsschmerzen")
         doc = et.SubElement(root, "Tonsilitis", Bezeichnung="Tonsilitis Noninfektional")
