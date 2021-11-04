@@ -7,7 +7,10 @@ import sys
 from PyQt6.QtCore import pyqtSlot
 from PyQt6.uic import loadUi
 from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QDialog, QApplication, QPushButton, QComboBox
+from PyQt6.QtWidgets import QDialog, QApplication, QPushButton, QComboBox, QDoubleSpinBox
+
+#Declarations
+fieber = bool
 
 #Frm Main
 class MainWindow(QDialog):
@@ -38,13 +41,25 @@ class MainWindow(QDialog):
         self.spinboxage.setMinimum(1)
         self.spinboxage.setMaximum(120)
 
+        # SpinnBoxFieber
+        self.spinboxtemp.setMinimum(30)
+        self.spinboxtemp.setMaximum(44)
+        self.spinboxtemp.setSuffix(" °C")
+        self.spinboxtemp.setSingleStep(0.1)
 
 #Button Clicked
     def createxml(self):
         m_encoding = 'UTF-8'
 
         answerage = str(self.spinboxage.value())
-        answerfieber = str(self.cmbgender.currentText())
+        #answerfieber = str(self.cmbgender.currentText())
+        answerfieber = self.spinboxtemp.value()
+        if answerfieber > 38:
+            fieber = True
+            print(fieber)
+        else:
+            fieber = False
+            print(fieber)
 
         root = et.Element("Halsschmerzen")
         doc = et.SubElement(root, "Tonsilitis", Bezeichnung="Tonsilitis Noninfektional")
@@ -55,7 +70,7 @@ class MainWindow(QDialog):
         wert = et.SubElement(risiko, "Wert").text = "Ja"
         wert = et.SubElement(risiko, "Wert").text = "Nein"
         symptom = et.SubElement(doc, "Symptopm", Bezeichnung="Fieber")
-        wert = et.SubElement(symptom, "Wert").text = answerfieber
+        wert = et.SubElement(symptom, "Wert").text = "answerfieber"
         wert = et.SubElement(symptom, "Wert").text = "Nein"
 
         dom = xml.dom.minidom.parseString(et.tostring(root))
@@ -72,8 +87,8 @@ app = QApplication(sys.argv)
 mainwindow = MainWindow()
 widget = QtWidgets.QStackedWidget()
 widget.addWidget(mainwindow)
-widget.setFixedWidth(1280)
-widget.setFixedHeight(720)
+widget.setFixedWidth(1024)
+widget.setFixedHeight(576)
 widget.show()
 try:
     sys.exit(app.exec())

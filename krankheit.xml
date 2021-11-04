@@ -3,7 +3,7 @@
 <Halsschmerzen>
 	<Tonsilitis Bezeichnung="Tonsilitis Noninfektional">
 		<Alter Bezeichnung="Alter">
-			<Wert>90</Wert>
+			<Wert>1</Wert>
 		</Alter>
 		<DauerTage von="1" bis="14">some vlaue2</DauerTage>
 		<Risikofaktoren Bezeichnung="Rauchen">
@@ -11,7 +11,7 @@
 			<Wert>Nein</Wert>
 		</Risikofaktoren>
 		<Symptopm Bezeichnung="Fieber">
-			<Wert>W</Wert>
+			<Wert>answerfieber</Wert>
 			<Wert>Nein</Wert>
 		</Symptopm>
 	</Tonsilitis>
