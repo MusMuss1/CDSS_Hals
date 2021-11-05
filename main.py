@@ -10,12 +10,9 @@ from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import *
 from PyQt6.QtCharts import *
 from PyQt6.QtCore import *
+import matplotlib.pyplot as plt
+import numpy as np
 
-#Declarations
-fever = bool
-centor = 0
-mcisaac = 0
-feverpain = 0
 
 #Frm Main
 class MainWindow(QMainWindow):
@@ -44,6 +41,11 @@ class MainWindow(QMainWindow):
         for answer in listgender:
             self.cmbgender.addItem(answer)
 
+        # ComboBoxGender
+        listanswer = ["Ja", "Nein"]
+        for answer in listanswer:
+            self.cmbhusten.addItem(answer)
+
         #SpinnBoxAge
         self.spinboxage.setMinimum(1)
         self.spinboxage.setMaximum(120)
@@ -55,42 +57,16 @@ class MainWindow(QMainWindow):
         self.spinboxtemp.setSuffix(" °C")
         self.spinboxtemp.setSingleStep(0.1)
 
-#Create Charts
-    def createchart(self):
-        set0 = QBarSet('Center')
-        set1 = QBarSet('Mc')
-        set2 = QBarSet('fever')
-
-        set0.append([3])
-        set1.append([4])
-        set2.append([5])
-
-        series = QBarSeries()
-        series.append(set0)
-        series.append(set1)
-        series.append(set2)
-
-        chart = QChart()
-        chart.addSeries(series)
-        chart.setTitle('Scores')
-        #chart.setAnimationOptions(QChart.SeriesAnimations)
-
-        axisX = QBarCategoryAxis()
-
-        axisY = QValueAxis()
-        axisY.setRange(0, 10)
-
-        chart.addAxis(axisX,Qt.AlignmentFlag.AlignBottom)
-        chart.addAxis(axisY,Qt.AlignmentFlag.AlignLeft)
-
-        chart.legend().setVisible(True)
-        chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
-
-        chartView = QChartView(chart)
-        self.setCentralWidget(chartView)
 
 #Button Clicked
     def createxml(self):
+
+        #Declarations
+        fever = bool
+        centor = 0
+        mcisaac = 0
+        feverpain = 0
+
         m_encoding = 'UTF-8'
 
         answerage = str(self.spinboxage.value())
@@ -107,6 +83,7 @@ class MainWindow(QMainWindow):
             centor =+ 1
             print(centor)
 
+        #Write parameter to XML
         root = et.Element("Halsschmerzen")
         doc = et.SubElement(root, "Tonsilitis", Bezeichnung="Tonsilitis Noninfektional")
         alter = et.SubElement(doc, "Alter", Bezeichnung="Alter")
@@ -129,6 +106,23 @@ class MainWindow(QMainWindow):
 
         print("fertig")
 
+        print(centor)
+
+        #Create Charts
+        height = [centor, mcisaac, feverpain]
+        bars = ('Centor Score', 'McIssac', 'FeverPain')
+        y_pos = np.arange(len(bars))
+
+        # Create bars
+        plt.bar(y_pos, height, color=['#ffca28', '#9ccc65', '#29b6f6'])
+        #if centor <
+
+        # Create names on the x-axis
+        plt.xticks(y_pos, bars)
+
+        # Show graphic
+        plt.show()
+
 app = QApplication(sys.argv)
 mainwindow = MainWindow()
 widget = QtWidgets.QStackedWidget()
@@ -140,9 +134,3 @@ try:
     sys.exit(app.exec())
 except:
     print("Something went wromg")
-
-
-#from tkinter import *
-#window = Tk()
-#window.title('Test')
-#window.mainloop()
