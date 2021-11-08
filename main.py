@@ -31,7 +31,12 @@ class MainWindow(QMainWindow):
         self.btnok.clicked.connect(self.createxml)
         #self.btnok.clicked.connect(self.createchart)
 
-        #ComboBoxFieber
+        # ComboBoxPain
+        listanswer = ["Ja", "Nein"]
+        for answer in listanswer:
+            self.cmbpain.addItem(answer)
+
+        # ComboBoxFieber
         listanswer=["Ja", "Nein"]
         for answer in listanswer:
             self.cmbfieber.addItem(answer)
@@ -46,7 +51,7 @@ class MainWindow(QMainWindow):
         for answer in listanswer:
             self.cmbhusten.addItem(answer)
 
-        #SpinnBoxAge
+        # SpinnBoxAge
         self.spinboxage.setMinimum(1)
         self.spinboxage.setMaximum(120)
 
@@ -56,6 +61,10 @@ class MainWindow(QMainWindow):
         self.spinboxtemp.setValue(36)
         self.spinboxtemp.setSuffix(" °C")
         self.spinboxtemp.setSingleStep(0.1)
+
+        # SpinnBoxTime
+        self.spinboxtime.setMinimum(1)
+        self.spinboxtime.setMaximum(365)
 
 
 #Button Clicked
@@ -69,9 +78,18 @@ class MainWindow(QMainWindow):
 
         m_encoding = 'UTF-8'
 
-        answerage = str(self.spinboxage.value())
+        answerage = self.spinboxage.value()
         #answerfieber = str(self.cmbgender.currentText())
         answerfieber = self.spinboxtemp.value()
+        answerhusten = str(self.cmbhusten.currentText())
+
+        if answerage < 15:
+            mcisaac += 1
+        if answerage >= 45:
+            mcisaac -= 1
+        else:
+            mcisaac += 0
+
         if answerfieber > 38:
             fever = True
             print(fever)
@@ -80,14 +98,19 @@ class MainWindow(QMainWindow):
             print(fever)
 
         if fever == True:
-            centor =+ 1
+            centor += 1
+            mcisaac += 1
             print(centor)
+
+        if answerhusten == 'Nein':
+            centor += 1
+            mcisaac += 1
 
         #Write parameter to XML
         root = et.Element("Halsschmerzen")
         doc = et.SubElement(root, "Tonsilitis", Bezeichnung="Tonsilitis Noninfektional")
         alter = et.SubElement(doc, "Alter", Bezeichnung="Alter")
-        wert = et.SubElement(alter, "Wert").text = answerage
+        wert = et.SubElement(alter, "Wert").text = str(answerage)
         dauer = et.SubElement(doc, "DauerTage", von="1", bis="14").text = "some vlaue2"
         risiko = et.SubElement(doc, "Risikofaktoren", Bezeichnung="Rauchen")
         wert = et.SubElement(risiko, "Wert").text = "Ja"
@@ -122,6 +145,9 @@ class MainWindow(QMainWindow):
 
         # Show graphic
         plt.show()
+        #scene = QGraphicsScene(self)
+        #scene.addItem(plt)
+        #self.graphicsView.setScene(scene)
 
 app = QApplication(sys.argv)
 mainwindow = MainWindow()
