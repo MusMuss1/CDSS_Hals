@@ -68,6 +68,10 @@ class MainWindow(QMainWindow):
         listanswer = ["Nein", "Ja"]
         for answer in listanswer:
             self.cmbhusten.addItem(answer)
+        # ComboBoxLymph
+        listanswer = ["Nein", "Ja"]
+        for answer in listanswer:
+            self.cmblymph.addItem(answer)
 
         #Text
         self.txtresult.setText("LOL")
@@ -108,8 +112,13 @@ class MainWindow(QMainWindow):
         answertemp = self.spinboxtemp.value()
         fevers = str(self.cmbfever.currentText())
         answerhusten = self.cmbhusten.currentIndex()
+        answerhustenstr = self.cmbhusten.currentText()
         answertonsill = self.cmbtonsill.currentIndex()
+        answertonsillstr = self.cmbtonsill.currentText()
+        answerlyph = self.cmblymph.currentIndex()
+        answerlyphstr = self.cmblymph.currentText()
         answersmoke = self.cmbsmoke.currentIndex()
+        answersmokestr = self.cmbsmoke.currentText()
 
         #changecmbfever(answerage)
 
@@ -135,8 +144,8 @@ class MainWindow(QMainWindow):
             mcisaac += 1
             print(centor)
 
-        #Check Symptom
-        if answerhusten == 1:
+        #Check Husten
+        if answerhusten == 0:
             centor += 1
             mcisaac += 1
 
@@ -148,31 +157,47 @@ class MainWindow(QMainWindow):
             chronic = False
             strchronic = "Nein"
 
-        #CheckTosill
+        #Check Tonsill
         if answertonsill == 1:
             centor += 1
             mcisaac += 1
 
+        #Check Lymph
+        if answerlyph == 1:
+            centor +=1
+            mcisaac += 1
+        print(centor)
         #Check Smoke
         if chronic & answersmoke == 1:
             self.txtresult.setText("Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
         if chronic:
             self.txtresult.setText("Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
 
+        #Scoreboard
+        if chronic == False:
+            if centor <= 2 and mcisaac <= 2:
+                self.txtresult.setText("Info:\nCentor und McIsaac score liegen unter 2.\nEs wird eine Symptomatische Behandlung empfohlen")
+            if centor == 3 or mcisaac == 3:
+                self.txtresult.setText("Info:\nUHLY.\nDU BIST HÄSSLICH")
+            if centor == 4 or mcisaac >= 4:
+                self.txtresult.setText("Info:\nCentor und McIsaac score liegen unter 2.\nBAKTERIEN")
+
 
         #Write parameter to XML
         root = et.Element("Halsschmerzen")
-        doc = et.SubElement(root, "Tonsilitis", Bezeichnung="Tonsilitis Noninfektional")
+        doc = et.SubElement(root, "Tonsilitis", Bezeichnung="Erkrankung ?")
         alter = et.SubElement(doc, "Alter", Bezeichnung="Alter")
         wert = et.SubElement(alter, "Wert").text = str(answerage)
         dauer = et.SubElement(doc, "DauerTage", Wert=str(answerdauer))
         chchronic = et.SubElement(dauer, "Chronisch", Wert=strchronic)
         risiko = et.SubElement(doc, "Risikofaktoren", Bezeichnung="Rauchen", von="Ja", bis="Nein")
-        wert = et.SubElement(risiko, "Wert").text = "Ja"
-        wert = et.SubElement(risiko, "Wert").text = "Nein"
+        wert = et.SubElement(risiko, "Wert").text = answersmokestr
         symptom = et.SubElement(doc, "Symptopm", Bezeichnung="Koerpertemperatur", Wert=str(answertemp))
         wert = et.SubElement(symptom, "Fieber").text = fevers
-        #wert = et.SubElement(symptom, "Wert").text = "Nein"
+        symptom = et.SubElement(doc, "Symptom", Bezeichnung="Husten")
+        wert = et.SubElement(symptom, "Wert").text = answerhustenstr
+        symptom = et.SubElement(doc, "Symptom", Bezeichnung="Vergrößerte oder belegte Tonsillen")
+        wert = et.SubElement(symptom, "Wert").text = answertonsillstr
 
         dom = xml.dom.minidom.parseString(et.tostring(root))
         xml_string = dom.toprettyxml()
@@ -181,16 +206,6 @@ class MainWindow(QMainWindow):
         with open("krankheit.xml", 'w') as xfile:
             xfile.write(part1 + 'encoding=\"{}\"?>\n'.format(m_encoding) + part2)
             xfile.close()
-
-        print("fertig")
-
-        #self.txtresult.setText("Sie sind wirklich krank \nOh ja, wirklich!")
-
-        print(centor)
-
-        #Scoreboard
-        if centor <= 2 & mcisaac <= 2:
-            self.txtresult.setText("Info:\nCentor und McIsaac score liegen unter 2.\nEs wird eine Symptomatische Behandlung empfohlen")
 
 
         #Create Charts

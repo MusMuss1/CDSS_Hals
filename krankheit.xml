@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Halsschmerzen>
-	<Tonsilitis Bezeichnung="Tonsilitis Noninfektional">
+	<Tonsilitis Bezeichnung="Erkrankung ?">
 		<Alter Bezeichnung="Alter">
-			<Wert>10</Wert>
+			<Wert>1</Wert>
 		</Alter>
 		<DauerTage Wert="1">
 			<Chronisch Wert="Nein"/>
 		</DauerTage>
 		<Risikofaktoren Bezeichnung="Rauchen" von="Ja" bis="Nein">
-			<Wert>Ja</Wert>
 			<Wert>Nein</Wert>
 		</Risikofaktoren>
-		<Symptopm Bezeichnung="Koerpertemperatur" Wert="38.400000000000034">
-			<Fieber>Ja</Fieber>
+		<Symptopm Bezeichnung="Koerpertemperatur" Wert="36.0">
+			<Fieber>Nein</Fieber>
 		</Symptopm>
+		<Symptom Bezeichnung="Husten">
+			<Wert>Nein</Wert>
+		</Symptom>
+		<Symptom Bezeichnung="Vergrößerte oder belegte Tonsillen">
+			<Wert>Nein</Wert>
+		</Symptom>
 	</Tonsilitis>
 </Halsschmerzen>
