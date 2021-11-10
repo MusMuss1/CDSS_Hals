@@ -8,11 +8,10 @@ from PyQt6.QtCore import pyqtSlot
 from PyQt6.uic import loadUi
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import *
-from PyQt6.QtCharts import *
 from PyQt6.QtCore import *
+#from PyQt6.QtCharts import*
 import matplotlib.pyplot as plt
 import numpy as np
-
 
 #Frm Main
 class MainWindow(QMainWindow):
@@ -27,6 +26,9 @@ class MainWindow(QMainWindow):
         #button.move(100, 70)
         #button.clicked.connect(self.createxml)
 
+        #t = QPushButton(self)
+        #t.addWidget(plt)
+
         #btnok
         self.btnok.clicked.connect(self.createxml)
         #self.btnok.clicked.connect(self.createchart)
@@ -39,7 +41,7 @@ class MainWindow(QMainWindow):
         # ComboBoxFieber
         listanswer=["Ja", "Nein"]
         for answer in listanswer:
-            self.cmbfieber.addItem(answer)
+            self.cmbfever.addItem(answer)
 
         # ComboBoxGender
         listgender = ["M", "W", "D"]
@@ -72,6 +74,8 @@ class MainWindow(QMainWindow):
 
         #Declarations
         fever = bool
+        chronic = bool
+        strchronic = ""
         centor = 0
         mcisaac = 0
         feverpain = 0
@@ -79,10 +83,12 @@ class MainWindow(QMainWindow):
         m_encoding = 'UTF-8'
 
         answerage = self.spinboxage.value()
-        #answerfieber = str(self.cmbgender.currentText())
-        answerfieber = self.spinboxtemp.value()
+        fevers = self.cmbfever.currentText()
+        answertemp = self.spinboxtemp.value()
         answerhusten = str(self.cmbhusten.currentText())
+        answerdauer = self.spinboxtime.value()
 
+        #Check Age
         if answerage < 15:
             mcisaac += 1
         if answerage >= 45:
@@ -90,34 +96,46 @@ class MainWindow(QMainWindow):
         else:
             mcisaac += 0
 
-        if answerfieber > 38:
+        #Check Temp
+        if answertemp >= 38:
             fever = True
             print(fever)
         else:
             fever = False
             print(fever)
 
+        #Check Fieber
         if fever == True:
             centor += 1
             mcisaac += 1
             print(centor)
 
+        #Check Symptom
         if answerhusten == 'Nein':
             centor += 1
             mcisaac += 1
+
+        #Check Dauer
+        if answerdauer > 14:
+            cronic = True
+            strchronic = "Ja"
+        else:
+            chronic = False
+            strchronic = "Nein"
 
         #Write parameter to XML
         root = et.Element("Halsschmerzen")
         doc = et.SubElement(root, "Tonsilitis", Bezeichnung="Tonsilitis Noninfektional")
         alter = et.SubElement(doc, "Alter", Bezeichnung="Alter")
         wert = et.SubElement(alter, "Wert").text = str(answerage)
-        dauer = et.SubElement(doc, "DauerTage", von="1", bis="14").text = "some vlaue2"
-        risiko = et.SubElement(doc, "Risikofaktoren", Bezeichnung="Rauchen")
+        dauer = et.SubElement(doc, "DauerTage", Wert=str(answerdauer))
+        chchronic = et.SubElement(dauer, "Chronisch", Wert=strchronic)
+        risiko = et.SubElement(doc, "Risikofaktoren", Bezeichnung="Rauchen", von="Ja", bis="Nein")
         wert = et.SubElement(risiko, "Wert").text = "Ja"
         wert = et.SubElement(risiko, "Wert").text = "Nein"
-        symptom = et.SubElement(doc, "Symptopm", Bezeichnung="Fieber")
-        wert = et.SubElement(symptom, "Wert").text = "answerfieber"
-        wert = et.SubElement(symptom, "Wert").text = "Nein"
+        symptom = et.SubElement(doc, "Symptopm", Bezeichnung="Koerpertemperatur", Wert=str(answertemp))
+        wert = et.SubElement(symptom, "Fieber").text = str(fevers)
+        #wert = et.SubElement(symptom, "Wert").text = "Nein"
 
         dom = xml.dom.minidom.parseString(et.tostring(root))
         xml_string = dom.toprettyxml()
@@ -145,9 +163,9 @@ class MainWindow(QMainWindow):
 
         # Show graphic
         plt.show()
-        #scene = QGraphicsScene(self)
-        #scene.addItem(plt)
-        #self.graphicsView.setScene(scene)
+
+
+        #super(MainWindow.t.setToolTip('This is an example button'))
 
 app = QApplication(sys.argv)
 mainwindow = MainWindow()

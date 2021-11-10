@@ -5,14 +5,15 @@
 		<Alter Bezeichnung="Alter">
 			<Wert>1</Wert>
 		</Alter>
-		<DauerTage von="1" bis="14">some vlaue2</DauerTage>
-		<Risikofaktoren Bezeichnung="Rauchen">
+		<DauerTage Wert="1">
+			<Chronisch Wert="Nein"/>
+		</DauerTage>
+		<Risikofaktoren Bezeichnung="Rauchen" von="Ja" bis="Nein">
 			<Wert>Ja</Wert>
 			<Wert>Nein</Wert>
 		</Risikofaktoren>
-		<Symptopm Bezeichnung="Fieber">
-			<Wert>answerfieber</Wert>
-			<Wert>Nein</Wert>
+		<Symptopm Bezeichnung="Koerpertemperatur" Wert="44.0">
+			<Fieber>Ja</Fieber>
 		</Symptopm>
 	</Tonsilitis>
 </Halsschmerzen>
