@@ -13,6 +13,11 @@ from PyQt6.QtCore import *
 import matplotlib.pyplot as plt
 import numpy as np
 
+
+#def createxml(answerage):
+    #if ans
+
+
 #Frm Main
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -25,23 +30,34 @@ class MainWindow(QMainWindow):
         #button.setToolTip('This is an example button')
         #button.move(100, 70)
         #button.clicked.connect(self.createxml)
+        #t=QTextBrowser(self)
+        #t.setText("TEST")
 
-        #t = QPushButton(self)
-        #t.addWidget(plt)
 
         #btnok
-        self.btnok.clicked.connect(self.createxml)
+        self.btnok.clicked.connect(self.work)
         #self.btnok.clicked.connect(self.createchart)
 
         # ComboBoxPain
-        listanswer = ["Ja", "Nein"]
+        listanswer = ["Nein", "Ja"]
         for answer in listanswer:
             self.cmbpain.addItem(answer)
 
+        # ComboBoxPain
+        listanswer = ["Nein", "Ja"]
+        for answer in listanswer:
+            self.cmbsmoke.addItem(answer)
+
         # ComboBoxFieber
-        listanswer=["Ja", "Nein"]
+        listanswer=["Nein", "Ja"]
         for answer in listanswer:
             self.cmbfever.addItem(answer)
+            self.cmbfever.setEnabled(False)
+
+        # ComboBoxTonsillen
+        listanswer = ["Nein", "Ja"]
+        for answer in listanswer:
+            self.cmbtonsill.addItem(answer)
 
         # ComboBoxGender
         listgender = ["M", "W", "D"]
@@ -49,9 +65,12 @@ class MainWindow(QMainWindow):
             self.cmbgender.addItem(answer)
 
         # ComboBoxGender
-        listanswer = ["Ja", "Nein"]
+        listanswer = ["Nein", "Ja"]
         for answer in listanswer:
             self.cmbhusten.addItem(answer)
+
+        #Text
+        self.txtresult.setText("LOL")
 
         # SpinnBoxAge
         self.spinboxage.setMinimum(1)
@@ -63,6 +82,8 @@ class MainWindow(QMainWindow):
         self.spinboxtemp.setValue(36)
         self.spinboxtemp.setSuffix(" °C")
         self.spinboxtemp.setSingleStep(0.1)
+        self.cmbfever.setCurrentIndex(0)
+        self.spinboxtemp.valueChanged.connect(self.updatecmbfever)
 
         # SpinnBoxTime
         self.spinboxtime.setMinimum(1)
@@ -70,7 +91,7 @@ class MainWindow(QMainWindow):
 
 
 #Button Clicked
-    def createxml(self):
+    def work(self):
 
         #Declarations
         fever = bool
@@ -83,10 +104,14 @@ class MainWindow(QMainWindow):
         m_encoding = 'UTF-8'
 
         answerage = self.spinboxage.value()
-        fevers = self.cmbfever.currentText()
-        answertemp = self.spinboxtemp.value()
-        answerhusten = str(self.cmbhusten.currentText())
         answerdauer = self.spinboxtime.value()
+        answertemp = self.spinboxtemp.value()
+        fevers = str(self.cmbfever.currentText())
+        answerhusten = self.cmbhusten.currentIndex()
+        answertonsill = self.cmbtonsill.currentIndex()
+        answersmoke = self.cmbsmoke.currentIndex()
+
+        #changecmbfever(answerage)
 
         #Check Age
         if answerage < 15:
@@ -111,17 +136,29 @@ class MainWindow(QMainWindow):
             print(centor)
 
         #Check Symptom
-        if answerhusten == 'Nein':
+        if answerhusten == 1:
             centor += 1
             mcisaac += 1
 
         #Check Dauer
         if answerdauer > 14:
-            cronic = True
+            chronic = True
             strchronic = "Ja"
         else:
             chronic = False
             strchronic = "Nein"
+
+        #CheckTosill
+        if answertonsill == 1:
+            centor += 1
+            mcisaac += 1
+
+        #Check Smoke
+        if chronic & answersmoke == 1:
+            self.txtresult.setText("Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
+        if chronic:
+            self.txtresult.setText("Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
+
 
         #Write parameter to XML
         root = et.Element("Halsschmerzen")
@@ -134,7 +171,7 @@ class MainWindow(QMainWindow):
         wert = et.SubElement(risiko, "Wert").text = "Ja"
         wert = et.SubElement(risiko, "Wert").text = "Nein"
         symptom = et.SubElement(doc, "Symptopm", Bezeichnung="Koerpertemperatur", Wert=str(answertemp))
-        wert = et.SubElement(symptom, "Fieber").text = str(fevers)
+        wert = et.SubElement(symptom, "Fieber").text = fevers
         #wert = et.SubElement(symptom, "Wert").text = "Nein"
 
         dom = xml.dom.minidom.parseString(et.tostring(root))
@@ -147,7 +184,14 @@ class MainWindow(QMainWindow):
 
         print("fertig")
 
+        #self.txtresult.setText("Sie sind wirklich krank \nOh ja, wirklich!")
+
         print(centor)
+
+        #Scoreboard
+        if centor <= 2 & mcisaac <= 2:
+            self.txtresult.setText("Info:\nCentor und McIsaac score liegen unter 2.\nEs wird eine Symptomatische Behandlung empfohlen")
+
 
         #Create Charts
         height = [centor, mcisaac, feverpain]
@@ -165,7 +209,12 @@ class MainWindow(QMainWindow):
         plt.show()
 
 
-        #super(MainWindow.t.setToolTip('This is an example button'))
+    def updatecmbfever(self):
+        answertemp = self.spinboxtemp.value()
+        if answertemp >= 38:
+            self.cmbfever.setCurrentIndex(1)
+        else:
+            self.cmbfever.setCurrentIndex(0)
 
 app = QApplication(sys.argv)
 mainwindow = MainWindow()

@@ -3,7 +3,7 @@
 <Halsschmerzen>
 	<Tonsilitis Bezeichnung="Tonsilitis Noninfektional">
 		<Alter Bezeichnung="Alter">
-			<Wert>1</Wert>
+			<Wert>10</Wert>
 		</Alter>
 		<DauerTage Wert="1">
 			<Chronisch Wert="Nein"/>
@@ -12,7 +12,7 @@
 			<Wert>Ja</Wert>
 			<Wert>Nein</Wert>
 		</Risikofaktoren>
-		<Symptopm Bezeichnung="Koerpertemperatur" Wert="44.0">
+		<Symptopm Bezeichnung="Koerpertemperatur" Wert="38.400000000000034">
 			<Fieber>Ja</Fieber>
 		</Symptopm>
 	</Tonsilitis>
