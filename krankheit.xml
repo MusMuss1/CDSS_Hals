@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Halsschmerzen>
-	<Tonsilitis Bezeichnung="Erkrankung ?">
+	<Tonsilitis Bezeichnung="bakteriell">
 		<Alter Bezeichnung="Alter">
 			<Wert>1</Wert>
 		</Alter>
+		<Geschlcht>
+			<Wert>M</Wert>
+		</Geschlcht>
 		<DauerTage Wert="1">
 			<Chronisch Wert="Nein"/>
 		</DauerTage>
@@ -17,8 +20,8 @@
 		<Symptom Bezeichnung="Husten">
 			<Wert>Nein</Wert>
 		</Symptom>
-		<Symptom Bezeichnung="Vergrößerte oder belegte Tonsillen">
-			<Wert>Nein</Wert>
+		<Symptom Bezeichnung="Vergroesserte oder belegte Tonsillen">
+			<Wert>Ja</Wert>
 		</Symptom>
 	</Tonsilitis>
 </Halsschmerzen>

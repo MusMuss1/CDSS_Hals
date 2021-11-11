@@ -13,9 +13,37 @@ from PyQt6.QtCore import *
 import matplotlib.pyplot as plt
 import numpy as np
 
+#encoding for XML File
+m_encoding = 'UTF-8'
 
-#def createxml(answerage):
-    #if ans
+# Write parameter to XML
+def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers, answerhustenstr, answertonsillstr):
+
+    # Write parameter to XML
+    root = et.Element("Halsschmerzen")
+    doc = et.SubElement(root, "Tonsilitis", Bezeichnung="bakteriell")
+    alter = et.SubElement(doc, "Alter", Bezeichnung="Alter")
+    wert = et.SubElement(alter, "Wert").text = str(answerage)
+    gender = et.SubElement(doc, "Geschlcht")
+    wert = et.SubElement(gender, "Wert").text = answergender
+    dauer = et.SubElement(doc, "DauerTage", Wert=str(answerdauer))
+    chchronic = et.SubElement(dauer, "Chronisch", Wert=strchronic)
+    risiko = et.SubElement(doc, "Risikofaktoren", Bezeichnung="Rauchen", von="Ja", bis="Nein")
+    wert = et.SubElement(risiko, "Wert").text = answersmokestr
+    symptom = et.SubElement(doc, "Symptopm", Bezeichnung="Koerpertemperatur", Wert=str(answertemp))
+    wert = et.SubElement(symptom, "Fieber").text = fevers
+    symptom = et.SubElement(doc, "Symptom", Bezeichnung="Husten")
+    wert = et.SubElement(symptom, "Wert").text = answerhustenstr
+    symptom = et.SubElement(doc, "Symptom", Bezeichnung="Vergroesserte oder belegte Tonsillen")
+    wert = et.SubElement(symptom, "Wert").text = answertonsillstr
+
+    dom = xml.dom.minidom.parseString(et.tostring(root))
+    xml_string = dom.toprettyxml()
+    part1, part2 = xml_string.split('?>')
+
+    with open("krankheit.xml", 'w') as xfile:
+        xfile.write(part1 + 'encoding=\"{}\"?>\n'.format(m_encoding) + part2)
+        xfile.close()
 
 
 #Frm Main
@@ -32,6 +60,9 @@ class MainWindow(QMainWindow):
         #button.clicked.connect(self.createxml)
         #t=QTextBrowser(self)
         #t.setText("TEST")
+
+        #c = QCheckBox(self)
+        #c.isChecked = True
 
 
         #btnok
@@ -98,6 +129,7 @@ class MainWindow(QMainWindow):
     def work(self):
 
         #Declarations
+        redflag = bool
         fever = bool
         chronic = bool
         strchronic = ""
@@ -105,9 +137,10 @@ class MainWindow(QMainWindow):
         mcisaac = 0
         feverpain = 0
 
-        m_encoding = 'UTF-8'
+        #m_encoding = 'UTF-8'
 
         answerage = self.spinboxage.value()
+        answergender = self.cmbgender.currentText()
         answerdauer = self.spinboxtime.value()
         answertemp = self.spinboxtemp.value()
         fevers = str(self.cmbfever.currentText())
@@ -120,7 +153,6 @@ class MainWindow(QMainWindow):
         answersmoke = self.cmbsmoke.currentIndex()
         answersmokestr = self.cmbsmoke.currentText()
 
-        #changecmbfever(answerage)
 
         #Check Age
         if answerage < 15:
@@ -166,46 +198,40 @@ class MainWindow(QMainWindow):
         if answerlyph == 1:
             centor +=1
             mcisaac += 1
-        print(centor)
-        #Check Smoke
-        if chronic & answersmoke == 1:
-            self.txtresult.setText("Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
-        if chronic:
-            self.txtresult.setText("Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
 
-        #Scoreboard
-        if chronic == False:
-            if centor <= 2 and mcisaac <= 2:
-                self.txtresult.setText("Info:\nCentor und McIsaac score liegen unter 2.\nEs wird eine Symptomatische Behandlung empfohlen")
-            if centor == 3 or mcisaac == 3:
-                self.txtresult.setText("Info:\nUHLY.\nDU BIST HÄSSLICH")
-            if centor == 4 or mcisaac >= 4:
-                self.txtresult.setText("Info:\nCentor und McIsaac score liegen unter 2.\nBAKTERIEN")
+        #Check RedFlag
+        if self.chkred_1.isChecked() or self.chkred_2.isChecked() or self.chkred_3.isChecked() or self.chkred_4.isChecked() or self.chkred_5.isChecked() or self.chkred_6.isChecked() or self.chkred_7.isChecked():
+            self.txtresult.setText("Achtung !!! \nEs ist mindestens eines der 'Red Flags' vorhanden.\nEine Anwendung der scores ist hier nicht möglich. Es wird eine Individuelle Beratung zur Diagnostik und Therapie empfohlen.")
+            redflag = True
+        else:
+            redflag = False
 
+        #if Redflag is not given -> use scores
+        if redflag == False:
+            # Check Smoke
+            if chronic & answersmoke == 1:
+                self.txtresult.setText(
+                    "Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
+            if chronic:
+                self.txtresult.setText(
+                    "Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
 
-        #Write parameter to XML
-        root = et.Element("Halsschmerzen")
-        doc = et.SubElement(root, "Tonsilitis", Bezeichnung="Erkrankung ?")
-        alter = et.SubElement(doc, "Alter", Bezeichnung="Alter")
-        wert = et.SubElement(alter, "Wert").text = str(answerage)
-        dauer = et.SubElement(doc, "DauerTage", Wert=str(answerdauer))
-        chchronic = et.SubElement(dauer, "Chronisch", Wert=strchronic)
-        risiko = et.SubElement(doc, "Risikofaktoren", Bezeichnung="Rauchen", von="Ja", bis="Nein")
-        wert = et.SubElement(risiko, "Wert").text = answersmokestr
-        symptom = et.SubElement(doc, "Symptopm", Bezeichnung="Koerpertemperatur", Wert=str(answertemp))
-        wert = et.SubElement(symptom, "Fieber").text = fevers
-        symptom = et.SubElement(doc, "Symptom", Bezeichnung="Husten")
-        wert = et.SubElement(symptom, "Wert").text = answerhustenstr
-        symptom = et.SubElement(doc, "Symptom", Bezeichnung="Vergrößerte oder belegte Tonsillen")
-        wert = et.SubElement(symptom, "Wert").text = answertonsillstr
+            # Scoreboard
+            if chronic == False:
+                if centor <= 2 and mcisaac <= 2:
+                    self.txtresult.setText(
+                        "Info:\nCentor und McIsaac score liegen unter 2.\nEs wird eine Symptomatische Behandlung empfohlen")
+                if centor == 3 or mcisaac == 3:
+                    self.txtresult.setText(
+                        "Info:\nCentor oder McIsaac scroe liegen bei min. 3.\nEs wird ein Delayed prescription empfohlen\nRezept über antibiotische Therapie ausstellen. Dieses ist einzulösen bei signifikanter Verschlechterung ODER wenn nach 3-5 Tagen keine Besserung")
+                    createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers,
+                                 answerhustenstr, answertonsillstr)
+                if centor == 4 or mcisaac >= 4:
+                    self.txtresult.setText(
+                        "Info:\nCentor oder McIsaac score liegen min bei 4.\nDie Wahscheinlichkeit einer bakteriellen Infektion durch z.B. Streptokokken ist sehr hoch.")
+                    createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers,
+                                 answerhustenstr, answertonsillstr)
 
-        dom = xml.dom.minidom.parseString(et.tostring(root))
-        xml_string = dom.toprettyxml()
-        part1, part2 = xml_string.split('?>')
-
-        with open("krankheit.xml", 'w') as xfile:
-            xfile.write(part1 + 'encoding=\"{}\"?>\n'.format(m_encoding) + part2)
-            xfile.close()
 
 
         #Create Charts
@@ -215,7 +241,6 @@ class MainWindow(QMainWindow):
 
         # Create bars
         plt.bar(y_pos, height, color=['#ffca28', '#9ccc65', '#29b6f6'])
-        #if centor <
 
         # Create names on the x-axis
         plt.xticks(y_pos, bars)
@@ -223,7 +248,7 @@ class MainWindow(QMainWindow):
         # Show graphic
         plt.show()
 
-
+    # update cmbfever status if temperature changed
     def updatecmbfever(self):
         answertemp = self.spinboxtemp.value()
         if answertemp >= 38:
