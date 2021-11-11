@@ -1,15 +1,12 @@
-print("HI")
-import random
 import lxml.etree as et
 import xml.dom.minidom
 import sys
 
-from PyQt6.QtCore import pyqtSlot
+
 from PyQt6.uic import loadUi
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
-#from PyQt6.QtCharts import*
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -17,10 +14,14 @@ import numpy as np
 m_encoding = 'UTF-8'
 
 # Write parameter to XML
-def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers, answerhustenstr, answertonsillstr):
+def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers, answerhustenstr, answertonsillstr, answerlymphstr):
 
     # Write parameter to XML
     root = et.Element("Halsschmerzen")
+    id = et.SubElement(root, "id", Wert="1234")
+    coding = et.SubElement(root, "coding")
+    code = et.SubElement(coding, "system", Wert = "https://www.icd-code.de/")
+    code = et.SubElement(coding, "system", Wert = "J03.0")
     doc = et.SubElement(root, "Tonsilitis", Bezeichnung="bakteriell")
     alter = et.SubElement(doc, "Alter", Bezeichnung="Alter")
     wert = et.SubElement(alter, "Wert").text = str(answerage)
@@ -36,6 +37,8 @@ def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, a
     wert = et.SubElement(symptom, "Wert").text = answerhustenstr
     symptom = et.SubElement(doc, "Symptom", Bezeichnung="Vergroesserte oder belegte Tonsillen")
     wert = et.SubElement(symptom, "Wert").text = answertonsillstr
+    symptom = et.SubElement(doc, "Symptom", Bezeichnung="Geschwollene Halslypmhknoten")
+    wert = et.SubElement(symptom, "Wert").text = answerlymphstr
 
     dom = xml.dom.minidom.parseString(et.tostring(root))
     xml_string = dom.toprettyxml()
@@ -60,9 +63,6 @@ class MainWindow(QMainWindow):
         #button.clicked.connect(self.createxml)
         #t=QTextBrowser(self)
         #t.setText("TEST")
-
-        #c = QCheckBox(self)
-        #c.isChecked = True
 
 
         #btnok
@@ -165,10 +165,10 @@ class MainWindow(QMainWindow):
         #Check Temp
         if answertemp >= 38:
             fever = True
-            print(fever)
+            #print(fever)
         else:
             fever = False
-            print(fever)
+            #print(fever)
 
         #Check Fieber
         if fever == True:
@@ -201,7 +201,7 @@ class MainWindow(QMainWindow):
 
         #Check RedFlag
         if self.chkred_1.isChecked() or self.chkred_2.isChecked() or self.chkred_3.isChecked() or self.chkred_4.isChecked() or self.chkred_5.isChecked() or self.chkred_6.isChecked() or self.chkred_7.isChecked():
-            self.txtresult.setText("Achtung !!! \nEs ist mindestens eines der 'Red Flags' vorhanden.\nEine Anwendung der scores ist hier nicht möglich. Es wird eine Individuelle Beratung zur Diagnostik und Therapie empfohlen.")
+            self.txtresult.setText("Achtung !!! \nEs ist mindestens eines der 'Red Flags' vorhanden.\nEine Anwendung der scores ist hier nicht möglich. Es wird eine individuelle Beratung zur Diagnostik und Therapie empfohlen.")
             redflag = True
         else:
             redflag = False
@@ -225,12 +225,12 @@ class MainWindow(QMainWindow):
                     self.txtresult.setText(
                         "Info:\nCentor oder McIsaac scroe liegen bei min. 3.\nEs wird ein Delayed prescription empfohlen\nRezept über antibiotische Therapie ausstellen. Dieses ist einzulösen bei signifikanter Verschlechterung ODER wenn nach 3-5 Tagen keine Besserung")
                     createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers,
-                                 answerhustenstr, answertonsillstr)
+                                 answerhustenstr, answertonsillstr, answerlyphstr)
                 if centor == 4 or mcisaac >= 4:
                     self.txtresult.setText(
-                        "Info:\nCentor oder McIsaac score liegen min bei 4.\nDie Wahscheinlichkeit einer bakteriellen Infektion durch z.B. Streptokokken ist sehr hoch.")
+                        "Info:\nCentor- oder McIsaac-score haben einen Wert von min. 4.\nDie Wahrscheinlichkeit einer bakteriellen Infektion durch z.B. Streptokokken ist sehr hoch.\nEs wird eine antibiotische Therapie empfohlen.")
                     createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers,
-                                 answerhustenstr, answertonsillstr)
+                                 answerhustenstr, answertonsillstr, answerlyphstr)
 
 
 

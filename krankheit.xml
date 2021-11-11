@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Halsschmerzen>
+	<id Wert="1234"/>
+	<coding>
+		<system Wert="https://www.icd-code.de/"/>
+		<system Wert="J03.0"/>
+	</coding>
 	<Tonsilitis Bezeichnung="bakteriell">
 		<Alter Bezeichnung="Alter">
-			<Wert>1</Wert>
+			<Wert>14</Wert>
 		</Alter>
 		<Geschlcht>
 			<Wert>M</Wert>
 		</Geschlcht>
-		<DauerTage Wert="1">
+		<DauerTage Wert="5">
 			<Chronisch Wert="Nein"/>
 		</DauerTage>
 		<Risikofaktoren Bezeichnung="Rauchen" von="Ja" bis="Nein">
 			<Wert>Nein</Wert>
 		</Risikofaktoren>
-		<Symptopm Bezeichnung="Koerpertemperatur" Wert="36.0">
-			<Fieber>Nein</Fieber>
+		<Symptopm Bezeichnung="Koerpertemperatur" Wert="38.5">
+			<Fieber>Ja</Fieber>
 		</Symptopm>
 		<Symptom Bezeichnung="Husten">
 			<Wert>Nein</Wert>
 		</Symptom>
 		<Symptom Bezeichnung="Vergroesserte oder belegte Tonsillen">
 			<Wert>Ja</Wert>
+		</Symptom>
+		<Symptom Bezeichnung="Geschwollene Halslypmhknoten">
+			<Wert>Nein</Wert>
 		</Symptom>
 	</Tonsilitis>
 </Halsschmerzen>
