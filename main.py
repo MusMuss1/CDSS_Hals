@@ -34,13 +34,6 @@ symptomtonsillex = root[2][20].get("Bezeichnung")
 symptomlymph = root[2][21].get("Bezeichnung")
 symptomroetung = root[2][25].get("Bezeichnung")
 
-#Andere Ursachen
-checkNeo = root[2][6].get("Bezeichnung")
-checkSmoke = root[2][7].get("Bezeichnung")
-checkReflux = root[2][8].get("Bezeichnung")
-checkOeso = root[2][9].get("Bezeichnung")
-checkRez = root[2][10].get("Bezeichnung")
-
 #Danger
 nodanger = "Nein"
 stridor = root[2][1].get("Bezeichnung")
@@ -100,6 +93,7 @@ class MainWindow(QMainWindow):
 
         #ComboboxRedflags
         self.cmbredflag.addItem("Nein")
+        self.cmbother.addItem("Nein")
 
         # GroupBoxes
         self.grpanamnese.setVisible(False)
@@ -168,12 +162,6 @@ class MainWindow(QMainWindow):
         self.spinboxtime.setMinimum(1)
         self.spinboxtime.setMaximum(365)
 
-        # CheckBoxes RedFlags
-        self.chkred_10.setText(checkNeo)
-        self.chkred_11.setText(checkSmoke)
-        self.chkred_12.setText(checkReflux)
-        self.chkred_13.setText(checkOeso)
-        self.chkred_14.setText(checkRez)
 
     def start(self):
         if self.cmbdanger.currentIndex() == 0:
@@ -329,6 +317,11 @@ class MainWindow(QMainWindow):
         for flag in flag_list:
             self.cmbredflag.addItem(flag.get("Bezeichnung"))
 
+        other = root.getchildren()[2]
+        other_things = other.findall('andereUrsachen')
+
+        for other in other_things:
+            self.cmbother.addItem(other.get("Bezeichnung"))
 
 
         #print(root[2][3].attrib)

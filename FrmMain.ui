@@ -72,19 +72,6 @@
     <property name="title">
      <string>Andere Ursachen</string>
     </property>
-    <widget class="QCheckBox" name="chkred_10">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Other1</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_12">
      <property name="geometry">
       <rect>
@@ -98,58 +85,6 @@
       <string>Ist einer dieser Parameter gegeben ?</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="chkred_11">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Other2</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="chkred_12">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>110</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Other2</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="chkred_13">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>140</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Other3</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="chkred_14">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>170</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Other3</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="btnok">
      <property name="geometry">
       <rect>
@@ -161,6 +96,16 @@
      </property>
      <property name="text">
       <string>OK</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="cmbother">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>201</width>
+       <height>22</height>
+      </rect>
      </property>
     </widget>
    </widget>
