@@ -17,14 +17,41 @@ m_encoding = 'UTF-8'
 tree = et.parse('Leitlinie.xml')
 root = tree.getroot()
 
-tempfever = root[2][2][0].text
+#Values
+
+#Age
+minage = root[2][0].get("von")
+minage = int(minage)
+print(minage)
+#Fever
+tempfever = root[2][22].get("min")
 tempfever = float(tempfever)
 
+#Labels
 age = root[2][0].get("Bezeichnung")
+symptomhusten = root[2][23].get("Bezeichnung")
+symptomtonsillex = root[2][20].get("Bezeichnung")
+symptomlymph = root[2][21].get("Bezeichnung")
+symptomroetung = root[2][25].get("Bezeichnung")
 
-symptom1 = root[2][3].get("Bezeichnung")
-symptom2 = root[2][4].get("Bezeichnung")
-symptom3 = root[2][5].get("Bezeichnung")
+#RedFlags
+checkScharlach = root[2][11].get("Bezeichnung")
+checkmono = root[2][12].get("Bezeichnung")
+checkother = root[2][13].get("Bezeichnung")
+checkimmmun = root[2][14].get("Bezeichnung")
+checkchemo = root[2][15].get("Bezeichnung")
+checkkorti = root[2][16].get("Bezeichnung")
+checkkomor = root[2][17].get("Bezeichnung")
+checkarf = root[2][18].get("Bezeichnung")
+checkmore = root[2][19].get("Bezeichnung")
+
+#Andere Ursachen
+checkNeo = root[2][6].get("Bezeichnung")
+checkSmoke = root[2][7].get("Bezeichnung")
+checkReflux = root[2][8].get("Bezeichnung")
+checkOeso = root[2][9].get("Bezeichnung")
+checkRez = root[2][10].get("Bezeichnung")
+
 print(age)
 
 
@@ -76,9 +103,9 @@ class MainWindow(QMainWindow):
 
         #set text for label form xml
         self.lblage.setText(age)
-        self.lblsymptom1.setText(symptom1)
-        self.lblsymptom2.setText(symptom2)
-        self.lblsymptom3.setText(symptom3)
+        self.lblsymptom1.setText(symptomhusten)
+        self.lblsymptom2.setText(symptomtonsillex)
+        self.lblsymptom3.setText(symptomlymph)
 
         #btnok
         self.btnok.clicked.connect(self.work)
@@ -125,7 +152,7 @@ class MainWindow(QMainWindow):
         self.txtresult.setText("Hallo")
 
         # SpinnBoxAge
-        self.spinboxage.setMinimum(1)
+        self.spinboxage.setMinimum(minage)
         self.spinboxage.setMaximum(120)
 
         # SpinnBoxFieber
@@ -140,6 +167,19 @@ class MainWindow(QMainWindow):
         # SpinnBoxTime
         self.spinboxtime.setMinimum(1)
         self.spinboxtime.setMaximum(365)
+
+        # CheckBoxes RedFlags
+        self.chkred_1.setText(checkScharlach)
+        self.chkred_2.setText(checkmono)
+        self.chkred_3.setText(checkother)
+        self.chkred_4.setText(checkimmmun)
+        self.chkred_5.setText(checkchemo)
+        self.chkred_6.setText(checkkorti)
+        self.chkred_7.setText(checkkomor)
+        self.chkred_8.setText(checkarf)
+        self.chkred_9.setText(checkmore)
+
+        # CheckBoxes RedFlags
 
 
 #Button Clicked
@@ -218,8 +258,8 @@ class MainWindow(QMainWindow):
             mcisaac += 1
 
         #Check RedFlag
-        if self.chkred_1.isChecked() or self.chkred_2.isChecked() or self.chkred_3.isChecked() or self.chkred_4.isChecked() or self.chkred_5.isChecked() or self.chkred_6.isChecked() or self.chkred_7.isChecked():
-            self.txtresult.setText("Achtung !!! \nEs ist mindestens eines der 'Red Flags' vorhanden.\nEine Anwendung der scores ist hier nicht möglich. Es wird eine individuelle Beratung zur Diagnostik und Therapie empfohlen.")
+        if self.chkred_1.isChecked() or self.chkred_2.isChecked() or self.chkred_3.isChecked() or self.chkred_4.isChecked() or self.chkred_5.isChecked() or self.chkred_6.isChecked() or self.chkred_7.isChecked() or self.chkred_7.isChecked() or self.chkred_8.isChecked() or self.chkred_9.isChecked():
+
             redflag = True
         else:
             redflag = False
@@ -235,7 +275,7 @@ class MainWindow(QMainWindow):
                     "Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
 
             # Scoreboard
-            if chronic == False:
+            if chronic == False & redflag == False:
                 if centor <= 2 and mcisaac <= 2:
                     self.txtresult.setText(
                         "Info:\nCentor und McIsaac score liegen unter 2.\nEs wird eine Symptomatische Behandlung empfohlen")
@@ -249,6 +289,9 @@ class MainWindow(QMainWindow):
                         "Info:\nCentor- oder McIsaac-score haben einen Wert von min. 4.\nDie Wahrscheinlichkeit einer bakteriellen Infektion durch z.B. Streptokokken ist sehr hoch.\nEs wird eine antibiotische Therapie empfohlen.\nAlternativ GAS-Schnelltest")
                     createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers,
                                  answerhustenstr, answertonsillstr, answerlyphstr)
+
+        else:
+            self.txtresult.setText("Achtung !!! \nEs ist mindestens eines der 'Red Flags' vorhanden.\nEine Anwendung der scores ist hier nicht möglich. Es wird eine individuelle Beratung zur Diagnostik und Therapie empfohlen.")
 
 
 
@@ -278,20 +321,28 @@ class MainWindow(QMainWindow):
     def loadxml(self):
         print("HI")
         ts = int
-        tree = et.parse('Leitlinie_2.xml')
+        tree = et.parse('Leitlinie.xml')
         root = tree.getroot()
-        print(root[2][3].attrib)
-        print(root[2][3].get("Bezeichnung"))
+        print(root[2][20].attrib)
+
+        print(len(root[2].tag))
+
+        flags = root.getchildren()[2]
+        flag_list = flags.findall('RedFlags')
+        print(len(flag_list))
+        #print(root[2][3].attrib)
+        #print(root[2][3].get("Bezeichnung"))
         #t = len(root.getchildren())
         #print(t)
-        r = tree.xpath('/Halsschmerzen/coding')
-        r = r[0].tag
-        rt = root[1].tag
-        print('r = '+r)
-        print('rt = '+rt)
+        #r = tree.xpath('/Halsschmerzen/coding')
+        #r = r[0].tag
+        #rt = root[1].tag
+        #print('r = '+r)
+        #print('rt = '+rt)
         #print(root[2][3].tag)
-        print(root[2][1].get("bis"))
-        print("Alter "+root[2][0].get("min"))
+        #print(root[2][1].get("bis"))
+        #print("Alter "+root[2][0].get("min"))
+
 
 app = QApplication(sys.argv)
 mainwindow = MainWindow()

@@ -228,7 +228,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;vordere Halslymphknoten&lt;/p&gt;&lt;p&gt;Geschwollen und/oder Schmerzhaft&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>Symptom3</string>
     </property>
    </widget>
    <widget class="QComboBox" name="cmblymph">
@@ -263,7 +263,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Scharlach-Exanthem</string>
+      <string>RedFlag1</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_9">
@@ -357,6 +357,32 @@
       <string>Schwere Komorbiditäten</string>
      </property>
     </widget>
+    <widget class="QCheckBox" name="chkred_8">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>260</y>
+       <width>211</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Schwere Komorbiditäten</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="chkred_9">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>290</y>
+       <width>211</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Schwere Komorbiditäten</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="label_10">
     <property name="geometry">
@@ -396,6 +422,97 @@
     <property name="text">
      <string>Load XML</string>
     </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>10</y>
+      <width>231</width>
+      <height>381</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Andere Ursachen</string>
+    </property>
+    <widget class="QCheckBox" name="chkred_10">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>211</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>RedFlag1</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_12">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>211</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Ist einer dieser Parameter gegeben ?</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="chkred_11">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>211</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>V.a. Mononukleose</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="chkred_12">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>211</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Immunsuppression</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="chkred_13">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>140</y>
+       <width>211</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Infektion mit anderem Fokus (z.B. Pneumonie)</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="chkred_14">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>170</y>
+       <width>211</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Chemotherapie</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

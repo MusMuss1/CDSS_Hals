@@ -8,19 +8,19 @@
 	</coding>
 	<Tonsilitis Bezeichnung="bakteriell">
 		<Alter Bezeichnung="Alter">
-			<Wert>25</Wert>
+			<Wert>14</Wert>
 		</Alter>
 		<Geschlcht>
 			<Wert>M</Wert>
 		</Geschlcht>
-		<DauerTage Wert="7">
+		<DauerTage Wert="1">
 			<Chronisch Wert="Nein"/>
 		</DauerTage>
 		<Risikofaktoren Bezeichnung="Rauchen" von="Ja" bis="Nein">
 			<Wert>Nein</Wert>
 		</Risikofaktoren>
-		<Symptopm Bezeichnung="Koerpertemperatur" Wert="38.500000000000036">
-			<Fieber>Ja</Fieber>
+		<Symptopm Bezeichnung="Koerpertemperatur" Wert="36.0">
+			<Fieber>Nein</Fieber>
 		</Symptopm>
 		<Symptom Bezeichnung="Husten">
 			<Wert>Nein</Wert>
