@@ -59,19 +59,6 @@
       </rect>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnload">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>340</y>
-       <width>56</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Load XML</string>
-     </property>
-    </widget>
    </widget>
    <widget class="QGroupBox" name="grpother">
     <property name="geometry">
@@ -119,7 +106,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>GroupBox</string>
+     <string>Anamnese</string>
     </property>
     <widget class="QLabel" name="label_11">
      <property name="geometry">

@@ -17,8 +17,6 @@ m_encoding = 'UTF-8'
 tree = et.parse('Leitlinie.xml')
 root = tree.getroot()
 
-#Values
-
 #Age
 minage = root[2][0].get("von")
 minage = int(minage)
@@ -73,7 +71,7 @@ def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, f
     coding = et.SubElement(root, "coding")
     code = et.SubElement(coding, "system", Wert = "https://www.icd-code.de/")
     code = et.SubElement(coding, "system", Wert = "J03.0")
-    doc = et.SubElement(root, "Tonsilitis", Bezeichnung="bakteriell")
+    doc = et.SubElement(root, "Halsschmerz", Bezeichnung="value")
     alter = et.SubElement(doc, "Alter", Bezeichnung="Alter")
     wert = et.SubElement(alter, "Wert").text = str(answerage)
     gender = et.SubElement(doc, "Geschlcht")
@@ -134,8 +132,6 @@ class MainWindow(QMainWindow):
         self.btnok.clicked.connect(self.work)
         self.btnok_start.clicked.connect(self.start)
 
-        self.btnload.clicked.connect(self.loadxml2)
-
         # ComboBoxFieber
         listanswer=["Nein", "Ja"]
         for answer in listanswer:
@@ -190,19 +186,20 @@ class MainWindow(QMainWindow):
 
     def start(self):
         if self.cmbdanger.currentIndex() == 0:
-            print("FAMFKLMKL")
             self.grpdanger.setVisible(False)
             self.grpanamnese.setVisible(True)
             self.grpredflags.setVisible(True)
-            self.grpother.setVisible(True)
+            self.txtresult.setText("")
+        else:
+            self.txtresult.setText("Es ist Abwendbar-Gefaehrlicher Verlauf vorhanden.\nDie Scores sind nicht anwendbar.\nEs wird eine Ueberweisung ins Krankenhaus empfohlen.")
 
 
 #Button Clicked
     def work(self):
         #Declarations
-        redflag = bool
-        fever = bool
-        chronic = bool
+        redflag = False
+        fever = False
+        chronic = False
         strchronic = ""
         centor = 0
         mcisaac = 0
@@ -261,10 +258,10 @@ class MainWindow(QMainWindow):
         if answerdauer > 14:
             chronic = True
             strchronic = "Ja"
-        if answerdauer <= 3:
+        if answerdauer < 14:
             feverpain += 1
             chronic = False
-        else:
+        if answerdauer <= 3:
             chronic = False
             strchronic = "Nein"
 
@@ -283,7 +280,9 @@ class MainWindow(QMainWindow):
         if answerroet == 1:
             feverpain += 1
 
-
+       # chronic = True
+        print(chronic)
+        print(answerdauer)
         #List for all parameters need for create xml
         parameters = [strchronic, answerage, answergender, answerdauer, answertemp, fevers, answerhustenstr, answertonsillstr, answerlyphstr, answerredflag, answerother, symptomhusten, symptomlymph, symptomtonsillex, symptomroetung]
 
@@ -297,15 +296,15 @@ class MainWindow(QMainWindow):
         #if Redflag is not given -> use scores
         if redflag == False:
             # Check Smoke
-            if chronic :
-                self.txtresult.setText(
-                    "Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
-
+            if chronic:
+                self.txtresult.setText("Empfehlungen:\n\nEs liegt ein chronischer Verlauf vor.\nDie Scores sind nicht anwendbar.\nEs wird empfohlen, nach anderen Ursachen zu suchen.")
+                createxmlbak(*parameters)
             # Scoreboard
             if chronic == False:
                 if centor <= 2 and mcisaac <= 2 and feverpain <= 2:
                     self.txtresult.setText(
                         "Info:\nCentor und McIsaac score liegen unter 2.\nEs wird eine Symptomatische Behandlung empfohlen")
+                    createxmlbak(*parameters)
                 if centor == 3 or mcisaac == 3 or feverpain == 3:
                     self.txtresult.setText(
                         "Info:\nCentor oder McIsaac scroe liegen bei min. 3.\nEs wird ein Delayed prescription empfohlen\nRezept über antibiotische Therapie ausstellen. Dieses ist einzulösen bei signifikanter Verschlechterung ODER wenn nach 3-5 Tagen keine Besserung")
@@ -313,11 +312,12 @@ class MainWindow(QMainWindow):
                 if centor == 4 or mcisaac >= 4 or feverpain >= 4:
                     self.txtresult.setText(
                         "Info:\nCentor- oder McIsaac-score haben einen Wert von min. 4.\nDie Wahrscheinlichkeit einer bakteriellen Infektion durch z.B. Streptokokken ist sehr hoch.\nEs wird eine antibiotische Therapie empfohlen.\nAlternativ GAS-Schnelltest")
+                    value = "Bakteriell"
                     createxmlbak(*parameters)
 
         else:
             self.txtresult.setText("Achtung !!! \nEs ist mindestens eines der 'Red Flags' vorhanden.\nEine Anwendung der scores ist hier nicht möglich. Es wird eine individuelle Beratung zur Diagnostik und Therapie empfohlen.")
-
+            createxmlbak(*parameters)
 
 
         #Create Charts
@@ -341,56 +341,15 @@ class MainWindow(QMainWindow):
             self.cmbfever.setCurrentIndex(1)
         else:
             self.cmbfever.setCurrentIndex(0)
-
+    # update duration status (if mor than 14 days, it's cronic)
     def updatetime(self):
         answertime = self.spinboxtime.value()
-        if answertime >= 14:
+        if answertime > 14:
             self.grpother.setVisible(True)
         else:
             self.grpother.setVisible(False)
 
-
-    def loadxml2(self):
-        print("HI")
-        ts = int
-        tree = et.parse('Leitlinie.xml')
-        root = tree.getroot()
-        print(root[2][20].attrib)
-
-        print(len(root[2].tag))
-
-        flags = root.getchildren()[2]
-        flag_list = flags.findall('RedFlags')
-        print(len(flag_list))
-        for flag in flag_list:
-            self.cmbredflag.addItem(flag.get("Bezeichnung"))
-
-        other = root.getchildren()[2]
-        other_things = other.findall('andereUrsachen')
-
-        for other in other_things:
-            self.cmbother.addItem(other.get("Bezeichnung"))
-
-        danger = root.getchildren()[2]
-        dangers = danger.findall('GefaehrlicherVerlauf')
-
-        for danger in dangers:
-            self.cmbdanger.addItem(danger.get("Bezeichnung"))
-
-
-        #print(root[2][3].attrib)
-        #print(root[2][3].get("Bezeichnung"))
-        #t = len(root.getchildren())
-        #print(t)
-        #r = tree.xpath('/Halsschmerzen/coding')
-        #r = r[0].tag
-        #rt = root[1].tag
-        #print('r = '+r)
-        #print('rt = '+rt)
-        #print(root[2][3].tag)
-        #print(root[2][1].get("bis"))
-        #print("Alter "+root[2][0].get("min"))
-
+#show widget and set size
 app = QApplication(sys.argv)
 mainwindow = MainWindow()
 widget = QtWidgets.QStackedWidget()

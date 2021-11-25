@@ -6,32 +6,32 @@
 		<system Wert="https://www.icd-code.de/"/>
 		<system Wert="J03.0"/>
 	</coding>
-	<Tonsilitis Bezeichnung="bakteriell">
+	<Halsschmerz Bezeichnung="value">
 		<Alter Bezeichnung="Alter">
-			<Wert>3</Wert>
+			<Wert>8</Wert>
 		</Alter>
 		<Geschlcht>
 			<Wert>M</Wert>
 		</Geschlcht>
-		<DauerTage Wert="1">
+		<DauerTage Wert="7">
 			<Chronisch Wert=""/>
 		</DauerTage>
-		<Symptopm Bezeichnung="Koerpertemperatur" Wert="39.0">
+		<Symptopm Bezeichnung="Koerpertemperatur" Wert="38.0">
 			<Fieber>Ja</Fieber>
 		</Symptopm>
 		<Symptom Bezeichnung="Husten">
 			<Wert>Nein</Wert>
 		</Symptom>
 		<Symptom Bezeichnung="Tonsillenexsudate">
-			<Wert>Nein</Wert>
+			<Wert>Ja</Wert>
 		</Symptom>
 		<Symptom Bezeichnung="Zervikale Lymphadenopathie">
-			<Wert>Nein</Wert>
+			<Wert>Ja</Wert>
 		</Symptom>
 		<Symptom Bezeichnung="Rötung und Schwellung der Tonsillen">
-			<Wert>Nein</Wert>
+			<Wert>Ja</Wert>
 		</Symptom>
 		<andereUrsachen Bezeichnung="Nein"/>
 		<RedFlag Bezeichnung="Nein"/>
-	</Tonsilitis>
+	</Halsschmerz>
 </Halsschmerzen>
