@@ -35,6 +35,8 @@ symptomlymph = root[2][21].get("Bezeichnung")
 symptomroetung = root[2][25].get("Bezeichnung")
 
 
+
+#load data from XML Database
 def loadxml(self):
     #Path to XML Database
     tree = et.parse('Leitlinie.xml')
@@ -63,7 +65,7 @@ def loadxml(self):
 
 
 # Write parameter to XML
-def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers, answerhustenstr, answertonsillstr, answerlymphstr,annswerredflag, answerother):
+def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers, answerhustenstr, answertonsillstr, answerlymphstr,answerredflag,answerother,symptomhusten, symptomlymph, symptomtonsillex, symptomroetung):
 
     # Write parameter to XML
     root = et.Element("Halsschmerzen")
@@ -80,13 +82,16 @@ def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, f
     chchronic = et.SubElement(dauer, "Chronisch", Wert=strchronic)
     symptom = et.SubElement(doc, "Symptopm", Bezeichnung="Koerpertemperatur", Wert=str(answertemp))
     wert = et.SubElement(symptom, "Fieber").text = fevers
-    symptom = et.SubElement(doc, "Symptom", Bezeichnung="Husten")
+    symptom = et.SubElement(doc, "Symptom", Bezeichnung=symptomhusten)
     wert = et.SubElement(symptom, "Wert").text = answerhustenstr
-    symptom = et.SubElement(doc, "Symptom", Bezeichnung="Vergroesserte oder belegte Tonsillen")
+    symptom = et.SubElement(doc, "Symptom", Bezeichnung=symptomtonsillex)
     wert = et.SubElement(symptom, "Wert").text = answertonsillstr
-    symptom = et.SubElement(doc, "Symptom", Bezeichnung="Geschwollene Halslypmhknoten")
+    symptom = et.SubElement(doc, "Symptom", Bezeichnung=symptomlymph)
     wert = et.SubElement(symptom, "Wert").text = answerlymphstr
-    redflag = et.SubElement(doc, "RedFlag", Bezeichnung = "Red")
+    symptom = et.SubElement(doc, "Symptom", Bezeichnung=symptomroetung)
+    wert = et.SubElement(symptom, "Wert").text = answerlymphstr
+    other = et.SubElement(doc, "andereUrsachen", Bezeichnung=answerother)
+    redflag = et.SubElement(doc, "RedFlag", Bezeichnung = answerredflag)
 
     #create xml documentobjectmodel
     dom = xml.dom.minidom.parseString(et.tostring(root))
@@ -123,6 +128,7 @@ class MainWindow(QMainWindow):
         self.lblsymptom1.setText(symptomhusten)
         self.lblsymptom2.setText(symptomtonsillex)
         self.lblsymptom3.setText(symptomlymph)
+        self.lblsymptom4.setText(symptomroetung)
 
         #btnok
         self.btnok.clicked.connect(self.work)
@@ -154,6 +160,11 @@ class MainWindow(QMainWindow):
         listanswer = ["Nein", "Ja"]
         for answer in listanswer:
             self.cmblymph.addItem(answer)
+
+        # ComboBoxRoetung
+        listanswer = ["Nein", "Ja"]
+        for answer in listanswer:
+            self.cmbroet.addItem(answer)
 
         #Text
         self.txtresult.setText("Hallo")
@@ -210,8 +221,10 @@ class MainWindow(QMainWindow):
         answertonsillstr = self.cmbtonsill.currentText()
         answerlyph = self.cmblymph.currentIndex()
         answerlyphstr = self.cmblymph.currentText()
+        answerroet = self.cmbroet.currentIndex()
+        answerroetstr =self.cmbroet.currentText()
 
-        annswerredflag = self.cmbredflag.currentText()
+        answerredflag = self.cmbredflag.currentText()
         answerother = self.cmbother.currentText()
 
 
@@ -235,17 +248,22 @@ class MainWindow(QMainWindow):
         if fever == True:
             centor += 1
             mcisaac += 1
+            feverpain += 1
             print(centor)
 
         #Check Husten
         if answerhusten == 0:
             centor += 1
             mcisaac += 1
+            feverpain += 1
 
         #Check Dauer
         if answerdauer > 14:
             chronic = True
             strchronic = "Ja"
+        if answerdauer <= 3:
+            feverpain += 1
+            chronic = False
         else:
             chronic = False
             strchronic = "Nein"
@@ -254,16 +272,24 @@ class MainWindow(QMainWindow):
         if answertonsill == 1:
             centor += 1
             mcisaac += 1
+            feverpain += 1
 
         #Check Lymph
         if answerlyph == 1:
             centor +=1
             mcisaac += 1
 
+        # Check Roetng
+        if answerroet == 1:
+            feverpain += 1
+
+
+        #List for all parameters need for create xml
+        parameters = [strchronic, answerage, answergender, answerdauer, answertemp, fevers, answerhustenstr, answertonsillstr, answerlyphstr, answerredflag, answerother, symptomhusten, symptomlymph, symptomtonsillex, symptomroetung]
+
         #Check RedFlag
         if self.cmbredflag.currentIndex() != 0:
-            createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers,
-                         answerhustenstr, answertonsillstr, answerlyphstr, annswerredflag, answerother)
+            createxmlbak(*parameters)
             redflag = True
         else:
             redflag = False
@@ -277,19 +303,17 @@ class MainWindow(QMainWindow):
 
             # Scoreboard
             if chronic == False:
-                if centor <= 2 and mcisaac <= 2:
+                if centor <= 2 and mcisaac <= 2 and feverpain <= 2:
                     self.txtresult.setText(
                         "Info:\nCentor und McIsaac score liegen unter 2.\nEs wird eine Symptomatische Behandlung empfohlen")
-                if centor == 3 or mcisaac == 3:
+                if centor == 3 or mcisaac == 3 or feverpain == 3:
                     self.txtresult.setText(
                         "Info:\nCentor oder McIsaac scroe liegen bei min. 3.\nEs wird ein Delayed prescription empfohlen\nRezept über antibiotische Therapie ausstellen. Dieses ist einzulösen bei signifikanter Verschlechterung ODER wenn nach 3-5 Tagen keine Besserung")
-                    createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers,
-                                 answerhustenstr, answertonsillstr, answerlyphstr,annswerredflag,answerother)
-                if centor == 4 or mcisaac >= 4:
+                    createxmlbak(*parameters)
+                if centor == 4 or mcisaac >= 4 or feverpain >= 4:
                     self.txtresult.setText(
                         "Info:\nCentor- oder McIsaac-score haben einen Wert von min. 4.\nDie Wahrscheinlichkeit einer bakteriellen Infektion durch z.B. Streptokokken ist sehr hoch.\nEs wird eine antibiotische Therapie empfohlen.\nAlternativ GAS-Schnelltest")
-                    createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers,
-                                 answerhustenstr, answertonsillstr, answerlyphstr,annswerredflag,answerother)
+                    createxmlbak(*parameters)
 
         else:
             self.txtresult.setText("Achtung !!! \nEs ist mindestens eines der 'Red Flags' vorhanden.\nEine Anwendung der scores ist hier nicht möglich. Es wird eine individuelle Beratung zur Diagnostik und Therapie empfohlen.")

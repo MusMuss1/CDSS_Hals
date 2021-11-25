@@ -14,20 +14,24 @@
 			<Wert>M</Wert>
 		</Geschlcht>
 		<DauerTage Wert="1">
-			<Chronisch Wert="Nein"/>
+			<Chronisch Wert=""/>
 		</DauerTage>
-		<Symptopm Bezeichnung="Koerpertemperatur" Wert="36.0">
-			<Fieber>Nein</Fieber>
+		<Symptopm Bezeichnung="Koerpertemperatur" Wert="39.0">
+			<Fieber>Ja</Fieber>
 		</Symptopm>
 		<Symptom Bezeichnung="Husten">
 			<Wert>Nein</Wert>
 		</Symptom>
-		<Symptom Bezeichnung="Vergroesserte oder belegte Tonsillen">
+		<Symptom Bezeichnung="Tonsillenexsudate">
 			<Wert>Nein</Wert>
 		</Symptom>
-		<Symptom Bezeichnung="Geschwollene Halslypmhknoten">
+		<Symptom Bezeichnung="Zervikale Lymphadenopathie">
 			<Wert>Nein</Wert>
 		</Symptom>
-		<RedFlag Bezeichnung="Red"/>
+		<Symptom Bezeichnung="Rötung und Schwellung der Tonsillen">
+			<Wert>Nein</Wert>
+		</Symptom>
+		<andereUrsachen Bezeichnung="Nein"/>
+		<RedFlag Bezeichnung="Nein"/>
 	</Tonsilitis>
 </Halsschmerzen>
