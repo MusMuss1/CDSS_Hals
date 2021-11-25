@@ -331,16 +331,6 @@
     <property name="title">
      <string>Abwendbar-Gefährlicher Verlauf ?</string>
     </property>
-    <widget class="QComboBox" name="cmbdanger">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>20</y>
-       <width>241</width>
-       <height>22</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QPushButton" name="btnok_start">
      <property name="geometry">
       <rect>
@@ -354,9 +344,19 @@
       <string>OK</string>
      </property>
     </widget>
+    <widget class="QComboBox" name="cmbdanger">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>291</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
-   <zorder>grpdanger</zorder>
    <zorder>grpanamnese</zorder>
+   <zorder>grpdanger</zorder>
    <zorder>txtresult</zorder>
    <zorder>grpredflags</zorder>
    <zorder>grpother</zorder>

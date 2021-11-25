@@ -8,7 +8,7 @@
 	</coding>
 	<Tonsilitis Bezeichnung="bakteriell">
 		<Alter Bezeichnung="Alter">
-			<Wert>14</Wert>
+			<Wert>3</Wert>
 		</Alter>
 		<Geschlcht>
 			<Wert>M</Wert>
@@ -16,9 +16,6 @@
 		<DauerTage Wert="1">
 			<Chronisch Wert="Nein"/>
 		</DauerTage>
-		<Risikofaktoren Bezeichnung="Rauchen" von="Ja" bis="Nein">
-			<Wert>Nein</Wert>
-		</Risikofaktoren>
 		<Symptopm Bezeichnung="Koerpertemperatur" Wert="36.0">
 			<Fieber>Nein</Fieber>
 		</Symptopm>
@@ -26,10 +23,11 @@
 			<Wert>Nein</Wert>
 		</Symptom>
 		<Symptom Bezeichnung="Vergroesserte oder belegte Tonsillen">
-			<Wert>Ja</Wert>
+			<Wert>Nein</Wert>
 		</Symptom>
 		<Symptom Bezeichnung="Geschwollene Halslypmhknoten">
-			<Wert>Ja</Wert>
+			<Wert>Nein</Wert>
 		</Symptom>
+		<RedFlag Bezeichnung="Red"/>
 	</Tonsilitis>
 </Halsschmerzen>

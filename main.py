@@ -34,23 +34,36 @@ symptomtonsillex = root[2][20].get("Bezeichnung")
 symptomlymph = root[2][21].get("Bezeichnung")
 symptomroetung = root[2][25].get("Bezeichnung")
 
-#Danger
-nodanger = "Nein"
-stridor = root[2][1].get("Bezeichnung")
-system = root[2][2].get("Bezeichnung")
-auto = root[2][3].get("Bezeichnung")
-periton = root[2][4].get("Bezeichnung")
 
+def loadxml(self):
+    #Path to XML Database
+    tree = et.parse('Leitlinie.xml')
+    root = tree.getroot()
 
-dangers = [nodanger,stridor,system,auto,periton]
+    #search all RedFlags get the name and print to Combobox
+    flags = root.getchildren()[2]
+    flag_list = flags.findall('RedFlags')
+    print(len(flag_list))
+    for flag in flag_list:
+        self.cmbredflag.addItem(flag.get("Bezeichnung"))
 
-print(dangers)
+    # search all Other get the name and print to Combobox
+    other = root.getchildren()[2]
+    other_things = other.findall('andereUrsachen')
 
+    for other in other_things:
+        self.cmbother.addItem(other.get("Bezeichnung"))
 
+    # search all dangers get the name and print to Combobox
+    danger = root.getchildren()[2]
+    dangers = danger.findall('GefaehrlicherVerlauf')
+
+    for danger in dangers:
+        self.cmbdanger.addItem(danger.get("Bezeichnung"))
 
 
 # Write parameter to XML
-def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers, answerhustenstr, answertonsillstr, answerlymphstr):
+def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers, answerhustenstr, answertonsillstr, answerlymphstr,annswerredflag, answerother):
 
     # Write parameter to XML
     root = et.Element("Halsschmerzen")
@@ -73,6 +86,7 @@ def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, f
     wert = et.SubElement(symptom, "Wert").text = answertonsillstr
     symptom = et.SubElement(doc, "Symptom", Bezeichnung="Geschwollene Halslypmhknoten")
     wert = et.SubElement(symptom, "Wert").text = answerlymphstr
+    redflag = et.SubElement(doc, "RedFlag", Bezeichnung = "Red")
 
     #create xml documentobjectmodel
     dom = xml.dom.minidom.parseString(et.tostring(root))
@@ -94,6 +108,10 @@ class MainWindow(QMainWindow):
         #ComboboxRedflags
         self.cmbredflag.addItem("Nein")
         self.cmbother.addItem("Nein")
+        self.cmbdanger.addItem("Nein")
+
+        # Get infos from XML Databasefile in Comboboxes
+        loadxml(self)
 
         # GroupBoxes
         self.grpanamnese.setVisible(False)
@@ -109,9 +127,8 @@ class MainWindow(QMainWindow):
         #btnok
         self.btnok.clicked.connect(self.work)
         self.btnok_start.clicked.connect(self.start)
-        #self.btnok.clicked.connect(self.createchart)
 
-        self.btnload.clicked.connect(self.loadxml)
+        self.btnload.clicked.connect(self.loadxml2)
 
         # ComboBoxFieber
         listanswer=["Nein", "Ja"]
@@ -138,10 +155,6 @@ class MainWindow(QMainWindow):
         for answer in listanswer:
             self.cmblymph.addItem(answer)
 
-        # ComboBoxDanger
-        for danger in dangers:
-            self.cmbdanger.addItem(danger)
-
         #Text
         self.txtresult.setText("Hallo")
 
@@ -161,6 +174,7 @@ class MainWindow(QMainWindow):
         # SpinnBoxTime
         self.spinboxtime.setMinimum(1)
         self.spinboxtime.setMaximum(365)
+        self.spinboxtime.valueChanged.connect(self.updatetime)
 
 
     def start(self):
@@ -173,9 +187,7 @@ class MainWindow(QMainWindow):
 
 
 #Button Clicked
-    def work(self, variables):
-
-        print(variables)
+    def work(self):
         #Declarations
         redflag = bool
         fever = bool
@@ -198,6 +210,9 @@ class MainWindow(QMainWindow):
         answertonsillstr = self.cmbtonsill.currentText()
         answerlyph = self.cmblymph.currentIndex()
         answerlyphstr = self.cmblymph.currentText()
+
+        annswerredflag = self.cmbredflag.currentText()
+        answerother = self.cmbother.currentText()
 
 
         #Check Age
@@ -247,6 +262,8 @@ class MainWindow(QMainWindow):
 
         #Check RedFlag
         if self.cmbredflag.currentIndex() != 0:
+            createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers,
+                         answerhustenstr, answertonsillstr, answerlyphstr, annswerredflag, answerother)
             redflag = True
         else:
             redflag = False
@@ -259,7 +276,7 @@ class MainWindow(QMainWindow):
                     "Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
 
             # Scoreboard
-            if chronic == False & redflag == False:
+            if chronic == False:
                 if centor <= 2 and mcisaac <= 2:
                     self.txtresult.setText(
                         "Info:\nCentor und McIsaac score liegen unter 2.\nEs wird eine Symptomatische Behandlung empfohlen")
@@ -267,12 +284,12 @@ class MainWindow(QMainWindow):
                     self.txtresult.setText(
                         "Info:\nCentor oder McIsaac scroe liegen bei min. 3.\nEs wird ein Delayed prescription empfohlen\nRezept über antibiotische Therapie ausstellen. Dieses ist einzulösen bei signifikanter Verschlechterung ODER wenn nach 3-5 Tagen keine Besserung")
                     createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers,
-                                 answerhustenstr, answertonsillstr, answerlyphstr)
+                                 answerhustenstr, answertonsillstr, answerlyphstr,annswerredflag,answerother)
                 if centor == 4 or mcisaac >= 4:
                     self.txtresult.setText(
                         "Info:\nCentor- oder McIsaac-score haben einen Wert von min. 4.\nDie Wahrscheinlichkeit einer bakteriellen Infektion durch z.B. Streptokokken ist sehr hoch.\nEs wird eine antibiotische Therapie empfohlen.\nAlternativ GAS-Schnelltest")
                     createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers,
-                                 answerhustenstr, answertonsillstr, answerlyphstr)
+                                 answerhustenstr, answertonsillstr, answerlyphstr,annswerredflag,answerother)
 
         else:
             self.txtresult.setText("Achtung !!! \nEs ist mindestens eines der 'Red Flags' vorhanden.\nEine Anwendung der scores ist hier nicht möglich. Es wird eine individuelle Beratung zur Diagnostik und Therapie empfohlen.")
@@ -293,7 +310,7 @@ class MainWindow(QMainWindow):
         # Show graphic
         plt.show()
 
-    # update cmbfever status if temperature changed
+    # update cmbfever status if temperature changed if defined value is reached it shows fever or not
     def updatecmbfever(self):
         answertemp = self.spinboxtemp.value()
         if answertemp >= tempfever:
@@ -301,8 +318,15 @@ class MainWindow(QMainWindow):
         else:
             self.cmbfever.setCurrentIndex(0)
 
+    def updatetime(self):
+        answertime = self.spinboxtime.value()
+        if answertime >= 14:
+            self.grpother.setVisible(True)
+        else:
+            self.grpother.setVisible(False)
 
-    def loadxml(self):
+
+    def loadxml2(self):
         print("HI")
         ts = int
         tree = et.parse('Leitlinie.xml')
@@ -323,6 +347,12 @@ class MainWindow(QMainWindow):
         for other in other_things:
             self.cmbother.addItem(other.get("Bezeichnung"))
 
+        danger = root.getchildren()[2]
+        dangers = danger.findall('GefaehrlicherVerlauf')
+
+        for danger in dangers:
+            self.cmbdanger.addItem(danger.get("Bezeichnung"))
+
 
         #print(root[2][3].attrib)
         #print(root[2][3].get("Bezeichnung"))
@@ -336,7 +366,6 @@ class MainWindow(QMainWindow):
         #print(root[2][3].tag)
         #print(root[2][1].get("bis"))
         #print("Alter "+root[2][0].get("min"))
-
 
 app = QApplication(sys.argv)
 mainwindow = MainWindow()
