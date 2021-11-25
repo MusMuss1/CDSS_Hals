@@ -113,6 +113,8 @@ class MainWindow(QMainWindow):
 
         # GroupBoxes
         self.grpanamnese.setVisible(False)
+        self.grpredflags.setVisible(False)
+        self.grpother.setVisible(False)
 
         #set text for label form xml
         self.lblage.setText(age)
@@ -199,6 +201,8 @@ class MainWindow(QMainWindow):
             print("FAMFKLMKL")
             self.grpdanger.setVisible(False)
             self.grpanamnese.setVisible(True)
+            self.grpredflags.setVisible(True)
+            self.grpother.setVisible(True)
 
 
 #Button Clicked
@@ -344,7 +348,8 @@ class MainWindow(QMainWindow):
         flags = root.getchildren()[2]
         flag_list = flags.findall('RedFlags')
         print(len(flag_list))
-        self.groupBox_2.setVisible(False)
+        for flag in flag_list:
+            self.comboBox.addItem(flag.get("Bezeichnung"))
         #print(root[2][3].attrib)
         #print(root[2][3].get("Bezeichnung"))
         #t = len(root.getchildren())
