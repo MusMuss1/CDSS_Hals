@@ -34,17 +34,6 @@ symptomtonsillex = root[2][20].get("Bezeichnung")
 symptomlymph = root[2][21].get("Bezeichnung")
 symptomroetung = root[2][25].get("Bezeichnung")
 
-#RedFlags
-checkScharlach = root[2][11].get("Bezeichnung")
-checkmono = root[2][12].get("Bezeichnung")
-checkother = root[2][13].get("Bezeichnung")
-checkimmmun = root[2][14].get("Bezeichnung")
-checkchemo = root[2][15].get("Bezeichnung")
-checkkorti = root[2][16].get("Bezeichnung")
-checkkomor = root[2][17].get("Bezeichnung")
-checkarf = root[2][18].get("Bezeichnung")
-checkmore = root[2][19].get("Bezeichnung")
-
 #Andere Ursachen
 checkNeo = root[2][6].get("Bezeichnung")
 checkSmoke = root[2][7].get("Bezeichnung")
@@ -68,7 +57,7 @@ print(dangers)
 
 
 # Write parameter to XML
-def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers, answerhustenstr, answertonsillstr, answerlymphstr):
+def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers, answerhustenstr, answertonsillstr, answerlymphstr):
 
     # Write parameter to XML
     root = et.Element("Halsschmerzen")
@@ -83,8 +72,6 @@ def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, a
     wert = et.SubElement(gender, "Wert").text = answergender
     dauer = et.SubElement(doc, "DauerTage", Wert=str(answerdauer))
     chchronic = et.SubElement(dauer, "Chronisch", Wert=strchronic)
-    risiko = et.SubElement(doc, "Risikofaktoren", Bezeichnung="Rauchen", von="Ja", bis="Nein")
-    wert = et.SubElement(risiko, "Wert").text = answersmokestr
     symptom = et.SubElement(doc, "Symptopm", Bezeichnung="Koerpertemperatur", Wert=str(answertemp))
     wert = et.SubElement(symptom, "Fieber").text = fevers
     symptom = et.SubElement(doc, "Symptom", Bezeichnung="Husten")
@@ -110,6 +97,9 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         loadUi("FrmMain.ui",self)
         self.setWindowTitle("CDSS")
+
+        #ComboboxRedflags
+        self.cmbredflag.addItem("Nein")
 
         # GroupBoxes
         self.grpanamnese.setVisible(False)
@@ -177,17 +167,6 @@ class MainWindow(QMainWindow):
         # SpinnBoxTime
         self.spinboxtime.setMinimum(1)
         self.spinboxtime.setMaximum(365)
-
-        # CheckBoxes RedFlags
-        self.chkred_1.setText(checkScharlach)
-        self.chkred_2.setText(checkmono)
-        self.chkred_3.setText(checkother)
-        self.chkred_4.setText(checkimmmun)
-        self.chkred_5.setText(checkchemo)
-        self.chkred_6.setText(checkkorti)
-        self.chkred_7.setText(checkkomor)
-        self.chkred_8.setText(checkarf)
-        self.chkred_9.setText(checkmore)
 
         # CheckBoxes RedFlags
         self.chkred_10.setText(checkNeo)
@@ -279,8 +258,7 @@ class MainWindow(QMainWindow):
             mcisaac += 1
 
         #Check RedFlag
-        if self.chkred_1.isChecked() or self.chkred_2.isChecked() or self.chkred_3.isChecked() or self.chkred_4.isChecked() or self.chkred_5.isChecked() or self.chkred_6.isChecked() or self.chkred_7.isChecked() or self.chkred_7.isChecked() or self.chkred_8.isChecked() or self.chkred_9.isChecked():
-
+        if self.cmbredflag.currentIndex() != 0:
             redflag = True
         else:
             redflag = False
@@ -300,12 +278,12 @@ class MainWindow(QMainWindow):
                 if centor == 3 or mcisaac == 3:
                     self.txtresult.setText(
                         "Info:\nCentor oder McIsaac scroe liegen bei min. 3.\nEs wird ein Delayed prescription empfohlen\nRezept über antibiotische Therapie ausstellen. Dieses ist einzulösen bei signifikanter Verschlechterung ODER wenn nach 3-5 Tagen keine Besserung")
-                    createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers,
+                    createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers,
                                  answerhustenstr, answertonsillstr, answerlyphstr)
                 if centor == 4 or mcisaac >= 4:
                     self.txtresult.setText(
                         "Info:\nCentor- oder McIsaac-score haben einen Wert von min. 4.\nDie Wahrscheinlichkeit einer bakteriellen Infektion durch z.B. Streptokokken ist sehr hoch.\nEs wird eine antibiotische Therapie empfohlen.\nAlternativ GAS-Schnelltest")
-                    createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers,
+                    createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, fevers,
                                  answerhustenstr, answertonsillstr, answerlyphstr)
 
         else:
@@ -349,7 +327,10 @@ class MainWindow(QMainWindow):
         flag_list = flags.findall('RedFlags')
         print(len(flag_list))
         for flag in flag_list:
-            self.comboBox.addItem(flag.get("Bezeichnung"))
+            self.cmbredflag.addItem(flag.get("Bezeichnung"))
+
+
+
         #print(root[2][3].attrib)
         #print(root[2][3].get("Bezeichnung"))
         #t = len(root.getchildren())

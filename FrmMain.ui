@@ -27,7 +27,7 @@
    <widget class="QGroupBox" name="grpredflags">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>450</x>
       <y>10</y>
       <width>231</width>
       <height>381</height>
@@ -36,19 +36,6 @@
     <property name="title">
      <string>Red Flags</string>
     </property>
-    <widget class="QCheckBox" name="chkred_1">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>RedFlag1</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_9">
      <property name="geometry">
       <rect>
@@ -62,108 +49,14 @@
       <string>Ist einer dieser Parameter gegeben ?</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="chkred_2">
+    <widget class="QComboBox" name="cmbredflag">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>80</y>
-       <width>211</width>
-       <height>16</height>
+       <y>40</y>
+       <width>201</width>
+       <height>22</height>
       </rect>
-     </property>
-     <property name="text">
-      <string>RedFlag2</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="chkred_3">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>110</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>RedFlag3</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="chkred_4">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>140</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>RedFlag4</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="chkred_5">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>170</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>RedFlag5</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="chkred_6">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>200</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>RedFlag6</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="chkred_7">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>230</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>RedFlag7</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="chkred_8">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>260</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>RedFlag8</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="chkred_9">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>290</y>
-       <width>211</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>RedFlag9</string>
      </property>
     </widget>
    </widget>
@@ -268,16 +161,6 @@
      </property>
      <property name="text">
       <string>OK</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="comboBox">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>260</y>
-       <width>171</width>
-       <height>22</height>
-      </rect>
      </property>
     </widget>
    </widget>
