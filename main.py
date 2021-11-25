@@ -52,7 +52,17 @@ checkReflux = root[2][8].get("Bezeichnung")
 checkOeso = root[2][9].get("Bezeichnung")
 checkRez = root[2][10].get("Bezeichnung")
 
-print(age)
+#Danger
+nodanger = "Nein"
+stridor = root[2][1].get("Bezeichnung")
+system = root[2][2].get("Bezeichnung")
+auto = root[2][3].get("Bezeichnung")
+periton = root[2][4].get("Bezeichnung")
+
+
+dangers = [nodanger,stridor,system,auto,periton]
+
+print(dangers)
 
 
 
@@ -101,6 +111,9 @@ class MainWindow(QMainWindow):
         loadUi("FrmMain.ui",self)
         self.setWindowTitle("CDSS")
 
+        # GroupBoxes
+        self.grpanamnese.setVisible(False)
+
         #set text for label form xml
         self.lblage.setText(age)
         self.lblsymptom1.setText(symptomhusten)
@@ -109,19 +122,10 @@ class MainWindow(QMainWindow):
 
         #btnok
         self.btnok.clicked.connect(self.work)
+        self.btnok_start.clicked.connect(self.start)
         #self.btnok.clicked.connect(self.createchart)
 
         self.btnload.clicked.connect(self.loadxml)
-
-        # ComboBoxPain
-        listanswer = ["Nein", "Ja"]
-        for answer in listanswer:
-            self.cmbpain.addItem(answer)
-
-        # ComboBoxPain
-        listanswer = ["Nein", "Ja"]
-        for answer in listanswer:
-            self.cmbsmoke.addItem(answer)
 
         # ComboBoxFieber
         listanswer=["Nein", "Ja"]
@@ -147,6 +151,10 @@ class MainWindow(QMainWindow):
         listanswer = ["Nein", "Ja"]
         for answer in listanswer:
             self.cmblymph.addItem(answer)
+
+        # ComboBoxDanger
+        for danger in dangers:
+            self.cmbdanger.addItem(danger)
 
         #Text
         self.txtresult.setText("Hallo")
@@ -180,6 +188,17 @@ class MainWindow(QMainWindow):
         self.chkred_9.setText(checkmore)
 
         # CheckBoxes RedFlags
+        self.chkred_10.setText(checkNeo)
+        self.chkred_11.setText(checkSmoke)
+        self.chkred_12.setText(checkReflux)
+        self.chkred_13.setText(checkOeso)
+        self.chkred_14.setText(checkRez)
+
+    def start(self):
+        if self.cmbdanger.currentIndex() == 0:
+            print("FAMFKLMKL")
+            self.grpdanger.setVisible(False)
+            self.grpanamnese.setVisible(True)
 
 
 #Button Clicked
@@ -208,8 +227,6 @@ class MainWindow(QMainWindow):
         answertonsillstr = self.cmbtonsill.currentText()
         answerlyph = self.cmblymph.currentIndex()
         answerlyphstr = self.cmblymph.currentText()
-        answersmoke = self.cmbsmoke.currentIndex()
-        answersmokestr = self.cmbsmoke.currentText()
 
 
         #Check Age
@@ -267,10 +284,7 @@ class MainWindow(QMainWindow):
         #if Redflag is not given -> use scores
         if redflag == False:
             # Check Smoke
-            if chronic & answersmoke == 1:
-                self.txtresult.setText(
-                    "Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
-            if chronic:
+            if chronic :
                 self.txtresult.setText(
                     "Achtung !!! \nEs liegt evtl. eine Chronische Erkrankung vor. Das Prüfen auf weitere Anzeichen erforderlich")
 
@@ -330,6 +344,7 @@ class MainWindow(QMainWindow):
         flags = root.getchildren()[2]
         flag_list = flags.findall('RedFlags')
         print(len(flag_list))
+        self.groupBox_2.setVisible(False)
         #print(root[2][3].attrib)
         #print(root[2][3].get("Bezeichnung"))
         #t = len(root.getchildren())

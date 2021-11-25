@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Halsschmerzen>
+	<id Wert="1234"/>
+	<coding>
+		<system Wert="https://www.icd-code.de/"/>
+		<system Wert="R07.0"/>
+	</coding>
+	<Halsschmerz Bezeichnung="Halsschmerzen">
+		//wenn Alter unter 3, nicht anwendbar
+		<Alter Bezeichnung="Alter" von="3" bis="110"/>
+		<GefaehrlicherVerlauf Bezeichnung="Stridor, Zyanose?">
+			<Auswahl>
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+			</Auswahl>
+		</GefaehrlicherVerlauf>
+		//evtl noch nähere bezeichnung wenn man die maus drüber hält
+		<GefaehrlicherVerlauf Bezeichnung="schwere systemische Erkrankung?">
+			<Auswahl>
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+			</Auswahl>
+		</GefaehrlicherVerlauf>
+		<GefaehrlicherVerlauf Bezeichnung="Schub einer Autoimmunerkrankung?">
+			<Auswahl>
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+			</Auswahl>
+		</GefaehrlicherVerlauf>
+		<GefaehrlicherVerlauf Bezeichnung="Peritonsillarabszess?">
+			<Auswahl>
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+			</Auswahl>
+		</GefaehrlicherVerlauf>
+		//wenn Gefährlicher Verlauf >=1, dann Krankenhaus und Programm zu Ende
+		<DauerTage von="1" bis="14"/>
+		//wenn chronisch, dann möglicherweise:
+		<andereUrsachen Bezeichnung="Neoplasie"></andereUrsachen>
+		<andereUrsachen Bezeichnung="Rauchen"></andereUrsachen>
+		<andereUrsachen Bezeichnung="Postnasal drip, Reflux"></andereUrsachen>
+		<andereUrsachen Bezeichnung="Eosinophile Ösophagitis"></andereUrsachen>
+		<andereUrsachen Bezeichnung="Rez. Tonsillitis"></andereUrsachen>
+		//wenn nicht chronisch, Abfrage Red Flags 
+		// RedFlags bei akuten Halsschmerzen
+		<RedFlags Bezeichnung="Scharlach-Exanthem">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+				<Wert>Nicht bekannt</Wert>
+			</Auswahl>
+		</RedFlags>
+		<RedFlags Bezeichnung="V.a. Mononukleose">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+				<Wert>Nicht bekannt</Wert>
+			</Auswahl>
+		</RedFlags>
+		<RedFlags Bezeichnung="Infektion mit anderem Fokus (Pneumonie, Bronchitis, Otitis Sinusitis)">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+				<Wert>Nicht bekannt</Wert>
+			</Auswahl>
+		</RedFlags>
+		<RedFlags Bezeichnung="Immunsuppression">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+				<Wert>Nicht bekannt</Wert>
+			</Auswahl>
+		</RedFlags>
+		<RedFlags Bezeichnung="Chemotherapie">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+				<Wert>Nicht bekannt</Wert>
+			</Auswahl>
+		</RedFlags>
+		<RedFlags Bezeichnung="Orale Kortikoidtherapie">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+				<Wert>Nicht bekannt</Wert>
+			</Auswahl>
+		</RedFlags>
+		<RedFlags Bezeichnung="Schwere Komorbiditäten">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+				<Wert>Nicht bekannt</Wert>
+			</Auswahl>
+		</RedFlags>
+		<RedFlags Bezeichnung="Erhöhtes Risiko für ARF">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+				<Wert>Nicht bekannt</Wert>
+			</Auswahl>
+		</RedFlags>
+		<RedFlags Bezeichnung="Weitere erfüllte Kriterien">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+				<Wert>Nicht bekannt</Wert>
+			</Auswahl>
+		</RedFlags>
+		//wenn Radflags >= 1, dann Scores nicht anwendbar --> individuelle Beratung
+		<ScoreCounter Bezeichnung="Tonsillenexsudate">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+			</Auswahl>
+		</ScoreCounter>
+		<ScoreCounter Bezeichnung="Zervikale Lymphadenopathie">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+			</Auswahl>
+		</ScoreCounter>
+		<ScoreCounter Bezeichnung="Fieber" min="38.0">
+			<Wert></Wert>
+		</ScoreCounter>
+		<ScoreCounter Bezeichnung="Husten">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+			</Auswahl>
+		</ScoreCounter>
+		<ScoreCounter Bezeichnung="Patient ist unter 15 Jahre alt.">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+			</Auswahl>
+		</ScoreCounter>
+		<ScoreCounter Bezeichnung="Rötung und Schwellung der Tonsillen">
+			<Auswahl min="1">
+				<Wert>Ja</Wert>
+				<Wert>Nein</Wert>
+			</Auswahl>
+		</ScoreCounter>
+		<Scores>
+			<Score Bezeichnung="Centor-Score" max="4"/>
+			<Score Bezeichnung="McIsaac-Score" max="5"/>
+			<Score Bezeichnung="FeverPAIN-Score" max="5"/>
+		</Scores>
+	</Halsschmerz>
+</Halsschmerzen>
