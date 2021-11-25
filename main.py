@@ -1,7 +1,7 @@
 import lxml.etree as et
+from lxml.etree import fromstring
 import xml.dom.minidom
 import sys
-
 
 from PyQt6.uic import loadUi
 from PyQt6 import QtWidgets
@@ -12,6 +12,23 @@ import numpy as np
 
 #encoding for XML File
 m_encoding = 'UTF-8'
+
+#Load XML Database
+tree = et.parse('Leitlinie.xml')
+root = tree.getroot()
+
+tempfever = root[2][2][0].text
+tempfever = float(tempfever)
+
+age = root[2][0].get("Bezeichnung")
+
+symptom1 = root[2][3].get("Bezeichnung")
+symptom2 = root[2][4].get("Bezeichnung")
+symptom3 = root[2][5].get("Bezeichnung")
+print(age)
+
+
+
 
 # Write parameter to XML
 def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers, answerhustenstr, answertonsillstr, answerlymphstr):
@@ -40,6 +57,7 @@ def createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, a
     symptom = et.SubElement(doc, "Symptom", Bezeichnung="Geschwollene Halslypmhknoten")
     wert = et.SubElement(symptom, "Wert").text = answerlymphstr
 
+    #create xml documentobjectmodel
     dom = xml.dom.minidom.parseString(et.tostring(root))
     xml_string = dom.toprettyxml()
     part1, part2 = xml_string.split('?>')
@@ -56,18 +74,17 @@ class MainWindow(QMainWindow):
         loadUi("FrmMain.ui",self)
         self.setWindowTitle("CDSS")
 
-
-        #button = QPushButton('PyQt5 button', self)
-        #button.setToolTip('This is an example button')
-        #button.move(100, 70)
-        #button.clicked.connect(self.createxml)
-        #t=QTextBrowser(self)
-        #t.setText("TEST")
-
+        #set text for label form xml
+        self.lblage.setText(age)
+        self.lblsymptom1.setText(symptom1)
+        self.lblsymptom2.setText(symptom2)
+        self.lblsymptom3.setText(symptom3)
 
         #btnok
         self.btnok.clicked.connect(self.work)
         #self.btnok.clicked.connect(self.createchart)
+
+        self.btnload.clicked.connect(self.loadxml)
 
         # ComboBoxPain
         listanswer = ["Nein", "Ja"]
@@ -105,7 +122,7 @@ class MainWindow(QMainWindow):
             self.cmblymph.addItem(answer)
 
         #Text
-        self.txtresult.setText("LOL")
+        self.txtresult.setText("Hallo")
 
         # SpinnBoxAge
         self.spinboxage.setMinimum(1)
@@ -126,8 +143,9 @@ class MainWindow(QMainWindow):
 
 
 #Button Clicked
-    def work(self):
+    def work(self, variables):
 
+        print(variables)
         #Declarations
         redflag = bool
         fever = bool
@@ -163,7 +181,7 @@ class MainWindow(QMainWindow):
             mcisaac += 0
 
         #Check Temp
-        if answertemp >= 38:
+        if answertemp >= tempfever:
             fever = True
             #print(fever)
         else:
@@ -228,7 +246,7 @@ class MainWindow(QMainWindow):
                                  answerhustenstr, answertonsillstr, answerlyphstr)
                 if centor == 4 or mcisaac >= 4:
                     self.txtresult.setText(
-                        "Info:\nCentor- oder McIsaac-score haben einen Wert von min. 4.\nDie Wahrscheinlichkeit einer bakteriellen Infektion durch z.B. Streptokokken ist sehr hoch.\nEs wird eine antibiotische Therapie empfohlen.")
+                        "Info:\nCentor- oder McIsaac-score haben einen Wert von min. 4.\nDie Wahrscheinlichkeit einer bakteriellen Infektion durch z.B. Streptokokken ist sehr hoch.\nEs wird eine antibiotische Therapie empfohlen.\nAlternativ GAS-Schnelltest")
                     createxmlbak(strchronic, answerage, answergender, answerdauer, answertemp, answersmokestr, fevers,
                                  answerhustenstr, answertonsillstr, answerlyphstr)
 
@@ -251,10 +269,29 @@ class MainWindow(QMainWindow):
     # update cmbfever status if temperature changed
     def updatecmbfever(self):
         answertemp = self.spinboxtemp.value()
-        if answertemp >= 38:
+        if answertemp >= tempfever:
             self.cmbfever.setCurrentIndex(1)
         else:
             self.cmbfever.setCurrentIndex(0)
+
+
+    def loadxml(self):
+        print("HI")
+        ts = int
+        tree = et.parse('Leitlinie_2.xml')
+        root = tree.getroot()
+        print(root[2][3].attrib)
+        print(root[2][3].get("Bezeichnung"))
+        #t = len(root.getchildren())
+        #print(t)
+        r = tree.xpath('/Halsschmerzen/coding')
+        r = r[0].tag
+        rt = root[1].tag
+        print('r = '+r)
+        print('rt = '+rt)
+        #print(root[2][3].tag)
+        print(root[2][1].get("bis"))
+        print("Alter "+root[2][0].get("min"))
 
 app = QApplication(sys.argv)
 mainwindow = MainWindow()

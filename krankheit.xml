@@ -8,18 +8,18 @@
 	</coding>
 	<Tonsilitis Bezeichnung="bakteriell">
 		<Alter Bezeichnung="Alter">
-			<Wert>14</Wert>
+			<Wert>25</Wert>
 		</Alter>
 		<Geschlcht>
 			<Wert>M</Wert>
 		</Geschlcht>
-		<DauerTage Wert="5">
+		<DauerTage Wert="7">
 			<Chronisch Wert="Nein"/>
 		</DauerTage>
 		<Risikofaktoren Bezeichnung="Rauchen" von="Ja" bis="Nein">
 			<Wert>Nein</Wert>
 		</Risikofaktoren>
-		<Symptopm Bezeichnung="Koerpertemperatur" Wert="38.5">
+		<Symptopm Bezeichnung="Koerpertemperatur" Wert="38.500000000000036">
 			<Fieber>Ja</Fieber>
 		</Symptopm>
 		<Symptom Bezeichnung="Husten">
@@ -29,7 +29,7 @@
 			<Wert>Ja</Wert>
 		</Symptom>
 		<Symptom Bezeichnung="Geschwollene Halslypmhknoten">
-			<Wert>Nein</Wert>
+			<Wert>Ja</Wert>
 		</Symptom>
 	</Tonsilitis>
 </Halsschmerzen>
